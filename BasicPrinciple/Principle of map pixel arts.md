@@ -7,6 +7,9 @@ Minecraft map pixel arts can be divided into two types: optical arts and map art
 
 In optical arts, blocks show their original texture colors, each blocks are different. However, things changed in map arts. On map, blocks are displayed in a slightly different way, many blocks have exactly identical colors on map, for example, snow and white concrete. Besides, to most blocks,  there's a slight but noticable difference between texture colors and map colors. That makes many optical maps not shown very well in maps. Thus, the first thing is to understand the machanism of minecraft maps.
 
+<br>
+<br>
+
 ## How do maps display blocks?
 **Each map has a resolution of 128 × 128 pixels, which has no relation with its scale.** The region map record is determined by its scale, an integer ranging from 0 to 4. Map's corresponding region is a square, its height and weight equal to $128\times 2^{Scale}$. When scale is 0, a map records 128 × 128 blocks and each pixel correponds to 1 block, otherwise is corresponds to $2^{Scale}$ blocks. Maps with scales greater than 0 are meanningless to map pixel arts, I will no longer talk about them. I will show you the reason.
 
@@ -68,8 +71,55 @@ The relationship between aixs and map are as follows:
     \right.
    $$
 
-   Blocks are brighter when they are higher than their north side and darker when lower, **this enables map to show how landscape goes up and down.**
+   Among all base colors, water(12) is the most special one. Determined by water depth, Shadow value of water is unrelated to relative height. When depth is 1(one water block), shadow is 2; when depth is 6, shadow is 1; when depth is equal or greater than 11, shadow is 0.
+
+   Blocks are brighter when they are higher than their north side and darker when lower(when it comes to water, water is darken when deeper), **it enables map to show how landscape goes up and down.**
 
    **Notice that shadow is a 2-bit integer, allowing 4 values but only 3 used. The leftover one, shadow 3 work normally on map, but can never be found in vanilla survival.** I really wounder why Mojang made this happen.
 
-4. Why is scaled maps meanningless?
+4. Base color 0 is a special one
+   
+   Greatly different to all base colors, 0 means air or unexplored. The raw color of base color 0 is  full-transparent, letting through the background color of map item. Many transparent blocks such as glass, nether portal, torches and so on belongs to base color 0. It's weird that redstome lamp also belongs to 0.
+
+5. Why is scaled maps meanningless?
+
+   Acrooding to map machanism, **scaling a map do no help to promote resolution and color counts**, it's a waste of blocks and rooms.
+
+<br>
+<br>
+
+## How do map art works?
+1. 3D map art machanism
+   
+   In 3D maps, blocks are organised to form a pixel art. Each block plays 2 roles: 
+   - Displaying its base color
+   - Determine the south side block's shadow.
+
+   So you can see, the height of each block is not organised arbitarily, but determined by map colors.
+
+2. Flat map art machanism
+   
+   If you restrict that all map colors in map can only be shadow 1(shadow 2 for water), you make a flat map. Every blocks have same apititude.
+
+3. File-only map art machanism
+   
+   Vanilla maps(3D and flat) make images shown by building blocks, that's the only way in vanilla survival. But if you don't attach importance to vanillaness, replacing map data files is acceptable. File-only map simpliy replace existing map data file(s) by generated file(s) to make your image displayed. **Only in this way can the third shadow be applied to map pixel arts.
+**
+## What is height compression?
+Height compression is a new technology to decrease the maxium height of a 3D map. Since large images often result to height over 256, it makes great sence. There're 2 compression method: **lossless compression** and **lossy compression**.
+
+1. Lossless compression
+   
+   Lossless compression compresses an map art with effect unchanged. It will try to sink some segments in 3d map art.
+
+   **Lossless compression can not ensure to deflate all maps down to 256, some times a coloum of map is even uncompressale.**
+
+2. Lossy compression
+   
+   Obviously lossless ompression doesn't solve the proble totally. To compress the maxium height down to any value, modifying map color of several pixel is acceptable. Lossy compression algorithm deflate the maxiun height by changing some pixel slightly, minizing the sum color difference.
+
+   **Lossy compression is able to defalte most maps donw to any maxium height.** Implemented on genetic algorithm, it behaves slightly randomly and relatively slow.
+
+   Although it can deflate down to any maxium height theroilically, **it's not recommended to set the maxium allowed height less than 14**, otherwise my genetic algorithm will cost greatly a long time to compress -- or even fail.
+
+Notice that 2 methods above are parellel, which means that **you can compress with both method, or with single method**. If you enabled lossy compression, it's a good choice to enable lossless compression, it will make lossy compression **do less harm to the final map art quality**.
