@@ -25,11 +25,11 @@ The relationship between aixs and map are as follows:
 
 1. How do minecraft stores map datas?
    
-   In Minecraft Java Edition, map contents aren't stored in each map item, but under **data** folder. their file names are like **map_i.dat**, which i is any integer no less than 0 and no greater than 2,147,483,647(32767 in 1.12, 2,147,483,647 in 1.13+). The number i is called map sequence number, each map item in game simply stores its corresponding map sequence number. 
+   In Minecraft Java Edition, map contents aren't stored in each map item, but under **data** folder. Their file names are like **map_i.dat**, which i is any integer no less than 0 and no greater than 2,147,483,647(32767 in 1.12, 2,147,483,647 in 1.13+). The number i is called map sequence number, each map item in game simply stores its corresponding map sequence number. 
    
    For example, if i hold a map with sequence number 3, when save is loaded, minecraft find the map data files named *map_3.dat* and load it, then its contents is shown on the map. So the essence of map is not map items, but map data files. 
    
-   Almost everting of a map is stored in its map data file, including each pixel of it. To map pixel arts, the most important thing is how map pixels are stored.
+   Almost everything of a map is stored in its map data file, including each pixel of it. To map pixel arts, the most important thing is how map pixels are stored.
 
 2. Map pixel and map color
    
@@ -39,13 +39,13 @@ The relationship between aixs and map are as follows:
 
 3. Base color and shadow
    
-   Introduced as above, map color is a 8bit-integer. The first 6 bit of it formed an 6-bit unsigned integer, called base color, and the rest 2 bit formed another 2-bit unsigned integer, shadow. Their relation can be described by following equaltion:
+   Introduced as above, map color is a 8bit-integer. The first 6 bit of it formed an 6-bit unsigned integer, called base color, and the rest 2 bit formed another 2-bit unsigned integer, shadow. Their relation can be described by following equation:
 
    $$
    MapColor=4\times BaseColor+Shadow
    $$ 
    
-   Base color is determined by the block type, there can be at most 64 base colors in minecraft. However up to now(1.17), there are 62 base colors used, each has a raw RGB color. There are 52 base colors used from 1.12 to 1.15, and 59 in 1.16, and 62 in 1.17. The unused base colors don't have corresponding blocks and colors, they are meanning less to map pixel arts. 
+   Base color is determined by the block type, there can be at most 64 base colors in minecraft. However up to now (1.17), there are 62 base colors used, each has a raw RGB color. There are 52 base colors used from 1.12 to 1.15, and 59 in 1.16, and 62 in 1.17. The unused base colors don't have corresponding blocks and colors, they are meaningless to map pixel arts. 
    
    The relation of block, base color and its raw color is listed on wiki. See [Map Item Format](https://minecraft.fandom.com/wiki/Map_item_format).
 
@@ -60,7 +60,7 @@ The relationship between aixs and map are as follows:
 
    We can find that shadow 2 makes map color's color equals to raw color, while shadow 1 makes it darker, 0 more darker and 3 darkest.
 
-   What does shadow mean? Shadow means the relative height among a block and its surrounding blocks. If block A's corrdinate is $(x,y_A,z)$, and its north side block B$(x,y_B,z-1)$. The shadow value of A 
+   What does shadow mean? Shadow means the relative height among a block and its surrounding blocks. If block A's coordinate is $(x,y_A,z)$, and its north side block B$(x,y_B,z-1)$. The shadow value of A 
    $$
     Shadow(A)=\left\{
     \begin{aligned}
@@ -71,55 +71,55 @@ The relationship between aixs and map are as follows:
     \right.
    $$
 
-   Among all base colors, water(12) is the most special one. Determined by water depth, Shadow value of water is unrelated to relative height. When depth is 1(one water block), shadow is 2; when depth is 6, shadow is 1; when depth is equal or greater than 11, shadow is 0.
+   Among all base colors, water (12) is the most special one. Determined by water depth, Shadow value of water is unrelated to relative height. When depth is 1(one water block), shadow is 2; when depth is 6, shadow is 1; when depth is equal or greater than 11, shadow is 0.
 
-   Blocks are brighter when they are higher than their north side and darker when lower(when it comes to water, water is darken when deeper), **it enables map to show how landscape goes up and down.**
+   Blocks are brighter when they are higher than their north side and darker when lower (when it comes to water, water is darken when deeper), **it enables map to show how landscape goes up and down.**
 
-   **Notice that shadow is a 2-bit integer, allowing 4 values but only 3 used. The leftover one, shadow 3 work normally on map, but can never be found in vanilla survival.** I really wounder why Mojang made this happen.
+   **Notice that shadow is a 2-bit integer, allowing 4 values but only 3 used. The leftover one, shadow 3 work normally on map, but can never be found in vanilla survival.** I really wonder why Mojang made this happen.
 
 4. Base color 0 is a special one
    
-   Greatly different to all base colors, 0 means air or unexplored. The raw color of base color 0 is  full-transparent, letting through the background color of map item. Many transparent blocks such as glass, nether portal, torches and so on belongs to base color 0. It's weird that redstome lamp also belongs to 0.
+   Greatly different to all base colors, 0 means air or unexplored. The raw color of base color 0 is  full-transparent, letting through the background color of map item. Many transparent blocks such as glass, nether portal, torches and so on belongs to base color 0. It's weird that redstone lamp also belongs to 0.
 
-5. Why is scaled maps meanningless?
+5. Why is scaled maps meaningless?
 
-   Acrooding to map machanism, **scaling a map do no help to promote resolution and color counts**, it's a waste of blocks and rooms.
+   According to map mechanism, **scaling a map do no help to promote resolution and color counts**, it's a waste of blocks and rooms.
 
 <br>
 <br>
 
 ## How do map art works?
-1. 3D map art machanism
+1. 3D map art mechanism
    
-   In 3D maps, blocks are organised to form a pixel art. Each block plays 2 roles: 
+   In 3D maps, blocks are organized to form a pixel art. Each block plays 2 roles: 
    - Displaying its base color
    - Determine the south side block's shadow.
 
-   So you can see, the height of each block is not organised arbitarily, but determined by map colors.
+   So you can see, the height of each block is not organized arbitrarily, but determined by map colors.
 
-2. Flat map art machanism
+2. Flat map art mechanism
    
-   If you restrict that all map colors in map can only be shadow 1(shadow 2 for water), you make a flat map. Every blocks have same apititude.
+   If you restrict that all map colors in map can only be shadow 1(shadow 2 for water), you make a flat map. Every blocks have same aptitude.
 
-3. File-only map art machanism
+3. File-only map art mechanism
    
-   Vanilla maps(3D and flat) make images shown by building blocks, that's the only way in vanilla survival. But if you don't attach importance to vanillaness, replacing map data files is acceptable. File-only map simpliy replace existing map data file(s) by generated file(s) to make your image displayed. **Only in this way can the third shadow be applied to map pixel arts.
+   Vanilla maps (3D and flat) make images shown by building blocks, that's the only way in vanilla survival. But if you don't attach importance to vanillaness, replacing map data files is acceptable. File-only map simply replace existing map data file(s) by generated file(s) to make your image displayed. **Only in this way can the third shadow be applied to map pixel arts.
 **
 ## What is height compression?
-Height compression is a new technology to decrease the maxium height of a 3D map. Since large images often result to height over 256, it makes great sence. There're 2 compression method: **lossless compression** and **lossy compression**.
+Height compression is a new technology to decrease the maximum height of a 3D map. Since large images often result to height over 256, it makes great sense. There're 2 compression methods: **lossless compression** and **lossy compression**.
 
 1. Lossless compression
    
    Lossless compression compresses an map art with effect unchanged. It will try to sink some segments in 3d map art.
 
-   **Lossless compression can not ensure to deflate all maps down to 256, some times a coloum of map is even uncompressale.**
+   **Lossless compression can not ensure to deflate all maps down to 256, sometimes a column of map is even uncompressible.**
 
 2. Lossy compression
    
-   Obviously lossless ompression doesn't solve the proble totally. To compress the maxium height down to any value, modifying map color of several pixel is acceptable. Lossy compression algorithm deflate the maxiun height by changing some pixel slightly, minizing the sum color difference.
+   Obviously lossless compression doesn't solve the problem completely. To compress the maximum height down to any value, modifying map color of several pixel is acceptable. Lossy compression algorithm deflate the maximum height by changing some pixel slightly, minimizing the sum color difference.
 
-   **Lossy compression is able to defalte most maps donw to any maxium height.** Implemented on genetic algorithm, it behaves slightly randomly and relatively slow.
+   **Lossy compression is able to deflate most maps don to any maximum height.** Implemented on genetic algorithm, it behaves slightly randomly and relatively slow.
 
-   Although it can deflate down to any maxium height theroilically, **it's not recommended to set the maxium allowed height less than 14**, otherwise my genetic algorithm will cost greatly a long time to compress -- or even fail.
+   Although it can deflate down to any maximum height theoretically, **it's not recommended to set the maximun allowed height less than 14**, otherwise my genetic algorithm will cost greatly a long time to compress -- or even fail.
 
-Notice that 2 methods above are parellel, which means that **you can compress with both method, or with single method**. If you enabled lossy compression, it's a good choice to enable lossless compression, it will make lossy compression **do less harm to the final map art quality**.
+Notice that 2 methods above are parallel, which means that **you can compress with both methods, or with single method**. If you enabled lossy compression, it's a good choice to enable lossless compression, it will make lossy compression **do less harm to the final map art quality**.
