@@ -55,4 +55,21 @@ The relationship between aixs and map are as follows:
    | 2 | 255 |
    | 3 | 135 |
 
-   We can find that shadow 2 makes map color's color equals to raw color, while shadow 1 makes it darker, 0 darker and 3 darkest.
+   We can find that shadow 2 makes map color's color equals to raw color, while shadow 1 makes it darker, 0 more darker and 3 darkest.
+
+   What does shadow mean? Shadow means the relative height among a block and its surrounding blocks. If block A's corrdinate is $(x,y_A,z)$, and its north side block B$(x,y_B,z-1)$. The shadow value of A 
+   $$
+    Shadow(A)=\left\{
+    \begin{aligned}
+        0\quad,&\quad \text{when } y_A<y_B \\
+        1\quad,&\quad \text{when } y_A=y_B \\
+        2\quad,&\quad \text{when } y_A>y_B
+    \end{aligned}
+    \right.
+   $$
+
+   Blocks are brighter when they are higher than their north side and darker when lower, **this enables map to show how landscape goes up and down.**
+
+   **Notice that shadow is a 2-bit integer, allowing 4 values but only 3 used. The leftover one, shadow 3 work normally on map, but can never be found in vanilla survival.** I really wounder why Mojang made this happen.
+
+4. Why is scaled maps meanningless?
