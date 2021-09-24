@@ -103,8 +103,7 @@ The relationship between aixs and map are as follows:
 
 3. File-only map art mechanism
    
-   Vanilla maps (3D and flat) make images shown by building blocks, that's the only way in vanilla survival. But if you don't attach importance to vanillaness, replacing map data files is acceptable. File-only map simply replace existing map data file(s) by generated file(s) to make your image displayed. **Only in this way can the third shadow be applied to map pixel arts.
-**
+   Vanilla maps (3D and flat) make images shown by building blocks, that's the only way in vanilla survival. But if you don't attach importance to vanillaness, replacing map data files is acceptable. File-only map simply replace existing map data file(s) by generated file(s) to make your image displayed. **Only in this way can the third shadow be applied to map pixel arts.**
 
 <br>
 <br>
@@ -158,3 +157,7 @@ Notice that 2 methods above are parallel, which means that **you can compress wi
 <br>
 
 ## Glass Bridge in 3D map
+
+If you slice a 3d map horizontally, you will see many separate blocks on the cross-section. Such strcuture is really hard to build in vanilla survial, even with the help of litematica mod. If we connect these separate blocks, it will be easier to build. 
+
+Glass bridge is the connection. Using prim algorithm, SlopeCraft connects all blocks in a layer with minmum amount of glass blocks. Usually, glass bridges aren't constructed in every layer, otherwise it's a waste of glass blocks. Since prim algorithm has a time complexity of $O(n^3)$, it is a time-consuming process in building 3d structure. However, comparing to the time of building it in vanilla survival, it saves time actually.
