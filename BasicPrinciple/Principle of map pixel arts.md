@@ -71,7 +71,7 @@ The relationship between aixs and map are as follows:
     \right.
    $$
 
-   Among all base colors, water (12) is the most special one. Determined by water depth, Shadow value of water is unrelated to relative height. When depth is 1(one water block), shadow is 2; when depth is 6, shadow is 1; when depth is equal or greater than 11, shadow is 0.
+   Among all base colors, water (12) is the most special one. Determined by water depth, Shadow value of water is unrelated to relative height. When depth is 1 s(one water block), shadow is 2; when depth is 6, shadow is 1; when depth is equal or greater than 11, shadow is 0.
 
    Blocks are brighter when they are higher than their north side and darker when lower (when it comes to water, water is darken when deeper), **it enables map to show how landscape goes up and down.**
 
@@ -99,18 +99,46 @@ The relationship between aixs and map are as follows:
 
 2. Flat map art mechanism
    
-   If you restrict that all map colors in map can only be shadow 1(shadow 2 for water), you make a flat map. Every blocks have same aptitude.
+   If you restrict that all map colors in map can only be shadow 1 (shadow 2 for water), you make a flat map. Every blocks have same aptitude.
 
 3. File-only map art mechanism
    
    Vanilla maps (3D and flat) make images shown by building blocks, that's the only way in vanilla survival. But if you don't attach importance to vanillaness, replacing map data files is acceptable. File-only map simply replace existing map data file(s) by generated file(s) to make your image displayed. **Only in this way can the third shadow be applied to map pixel arts.
 **
+
+<br>
+<br>
+
+
 ## What is height compression?
 Height compression is a new technology to decrease the maximum height of a 3D map. Since large images often result to height over 256, it makes great sense. There're 2 compression methods: **lossless compression** and **lossy compression**.
 
 1. Lossless compression
    
    Lossless compression compresses an map art with effect unchanged. It will try to sink some segments in 3d map art.
+
+   Before compressing, SlopeCraft caculate each coloumn represently. In each coloumn, $\Delta H$ is caculated first and $H$ next. 
+
+   $$
+   \Delta H_i=\left\{
+      \begin{aligned}
+         Shadow_i-1\quad &,\quad \text{when }BaseColor_i\neq 0,12 \\
+         0 \quad &,\quad \text{else}
+      \end{aligned}
+      \right.
+
+      \\
+
+   H_i=\sum_{j=0}^i \Delta H_j \\
+
+   maxHeight=\max H
+   $$
+
+   In formula above, $\Delta H$ refers to height difference and $H$ refers to the actual height of each block. The formula has a little difference to source code, but the principle doesn't change.
+
+   The formula restrict that height difference must be -1, 0 or 1, but such restriction isn't a must. For example, a shadow-2-block only requires its height difference to be a positive number, it don't have to be 1. This provides us a chance to compress the maximum height losslessly.
+
+   Lossless compression also apply special process to water and air as their shadow values are unrelated to relative height. Although these special blocks increased the difficulty to compression, map with air or water will be compressed better.
 
    **Lossless compression can not ensure to deflate all maps down to 256, sometimes a column of map is even uncompressible.**
 
@@ -120,6 +148,13 @@ Height compression is a new technology to decrease the maximum height of a 3D ma
 
    **Lossy compression is able to deflate most maps don to any maximum height.** Implemented on genetic algorithm, it behaves slightly randomly and relatively slow.
 
-   Although it can deflate down to any maximum height theoretically, **it's not recommended to set the maximun allowed height less than 14**, otherwise my genetic algorithm will cost greatly a long time to compress -- or even fail.
+   Although it can deflate down to any maximum height theoretically, **it's not recommended to set the maximun allowed height less than 14**, otherwise my genetic algorithm will spend a long long time to compress -- or even fail.
+
+   **Long may the GENETIC ALGORITHM!**
 
 Notice that 2 methods above are parallel, which means that **you can compress with both methods, or with single method**. If you enabled lossy compression, it's a good choice to enable lossless compression, it will make lossy compression **do less harm to the final map art quality**.
+
+<br>
+<br>
+
+## Glass Bridge in 3D map
