@@ -1,14 +1,14 @@
-# 地图画原理
+# Principle of map pixel arts
 
 <br>
 
-**简体中文** | [English](./Principle%20of%20map%20pixel%20arts_EN.md)
+[简体中文](./Principle%20of%20map%20pixel%20arts.md) | **English**
 
 <br>
 
-这篇文章将会仔细介绍地图画的工作原理，包括立体地图画、平板地图画和纯文件地图画。SlopeCraft正是基于这些机制开发出来的。通过研究并利用这些机制，人们可以让地图显示出自定义的图像。
+This article will introduce how minecraft map pixel arts works, including 3D, flat and file-only maps. SlopeCraft cracks on these machanisms. By learning and hacking on these machnisms, people make custom images shown of maps.
 
-## 为什么用地图？
+## Why Maps ?
 Minecraft map pixel arts can be divided into two types: optical arts and map arts. Optical arts are built to be seen straightforwardly, they can be horizental like floors, or vertical like walls. opticacl arts are straight and simple, but they are huge, unconvenient to apperciate. But map can be put in an item frame then multiple maps together make a larger image displayed on wall of floor. That's the benefit of map arts.
 
 In optical arts, blocks show their original texture colors, each blocks are different. However, things changed in map arts. On map, blocks are displayed in a slightly different way, many blocks have exactly identical colors on map, for example, snow and white concrete. Besides, to most blocks,  there's a slight but noticable difference between texture colors and map colors. That makes many optical maps not shown very well in maps. Thus, the first thing is to understand the machanism of minecraft maps.
