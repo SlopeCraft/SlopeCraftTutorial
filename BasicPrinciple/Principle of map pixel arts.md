@@ -6,82 +6,82 @@
 
 <br>
 
-这篇文章将会仔细介绍地图画的工作原理，包括立体地图画、平板地图画和纯文件地图画。SlopeCraft正是基于这些机制开发出来的。通过研究并利用这些机制，人们可以让地图显示出自定义的图像。
+这篇文章将会仔细介绍地图画工作原理，包括立体地图画、平板地图画和纯文件地图画。SlopeCraft正是基于这些机制开发出来的。通过研究并利用这些机制，人们可以让地图显示出自定义的图像。
 
 ## 为什么用地图？
-Minecraft map pixel arts can be divided into two types: optical arts and map arts. Optical arts are built to be seen straightforwardly, they can be horizental like floors, or vertical like walls. opticacl arts are straight and simple, but they are huge, unconvenient to apperciate. But map can be put in an item frame then multiple maps together make a larger image displayed on wall of floor. That's the benefit of map arts.
+Minecraft地图画可以分为两类：视觉型和地图型。视觉型地图画顾名思义，是建造出来直接用眼睛看的，它们可以是水平平板，也可以是垂直墙面。视觉型地图画简单直接，但往往体积巨大，不是很方便观看。然而地图可以放进物品展示框里，显示在地板或者墙上。多张地图甚至可以拼成一张更大的画面。这就是地图的优势。
 
-In optical arts, blocks show their original texture colors, each blocks are different. However, things changed in map arts. On map, blocks are displayed in a slightly different way, many blocks have exactly identical colors on map, for example, snow and white concrete. Besides, to most blocks,  there's a slight but noticable difference between texture colors and map colors. That makes many optical maps not shown very well in maps. Thus, the first thing is to understand the machanism of minecraft maps.
+在视觉型地图画中，方块直接显示它们材质贴图的颜色，每个方块都是不一样的。但地图型地图画并非如此。地图显示的颜色与方块的材质贴图可能有细微差别，很多方块拥有完全一样的颜色，比如雪块和白色混凝土。此外，对于绝大多数方块，地图显示的颜色和眼睛看到的颜色都会有细微但可察觉的差异，这导致很多视觉型的地图画在地图上表现的不太好。所以第一件事情就是弄明白Minecraft地图的机制。
 
 <br>
 <br>
 
-## How do maps display blocks?
-**Each map has a resolution of 128 × 128 pixels, which has no relation with its scale.** The region map record is determined by its scale, an integer ranging from 0 to 4. Map's corresponding region is a square, its height and weight equal to $128\times 2^{Scale}$. When scale is 0, a map records 128 × 128 blocks and each pixel correponds to 1 block, otherwise is corresponds to $2^{Scale}$ blocks. Maps with scales greater than 0 are meanningless to map pixel arts, I will no longer talk about them. I will show you the reason.
+## 地图如何显示方块？
+**每个地图的分辨率都是 128 × 128 像素，与缩放尺度无关。** 地图对应的区域由缩放尺度scale决定，scale是一个整数，取值范围在0到4之间（包含0和4）。地图对应的区域是正方形，长宽均为$128\times 2^{Scale}$。当scale为0时，地图对应着128 × 128范围的方块，其中每个像素都代表一个方块；否则每个像素代表$2^{Scale}$个方块。scale大于0的地图对地图画而言没有意义，我不会再讨论它们，不过下文会告诉你为什么它们没有意义。
 
-Each map is aligned automatically, to make maps joins together easier. The starting corrdinate (northwestern corner) of a map is $(128\times 2^{Scale}-64,y,128\times 2^{Scale}-64)$.
+为了让地图更容易拼接，每个地图都会与一个网格自动对齐。地图起始坐标（西北角）为$(128\times 2^{Scale}-64,y,128\times 2^{Scale}-64)$。
 
-The relationship between aixs and map are as follows:
-| Direction | Map Direction | Axis Direction | 
+坐标轴和东西南北的关系表：
+| 方向 | 地图方向 | 坐标轴方向 | 
 | :----: | :----: | :----: |
-| North | up | z- |
-| South | down | z+ |
-| West | left | x- |
-| East | right | x+ |
+| 北 | 上 | z- |
+| 南 | 下 | z+ |
+| 西 | 左 | x- |
+| 东 | 右 | x+ |
 
-1. How do minecraft stores map datas?
+1. Minecraft怎样存储地图数据？
    
-   In Minecraft Java Edition, map contents aren't stored in each map item, but under **data** folder. Their file names are like **map_i.dat**, which i is any integer no less than 0 and no greater than 2,147,483,647(32767 in 1.12, 2,147,483,647 in 1.13+). The number i is called map sequence number, each map item in game simply stores its corresponding map sequence number. 
+   在Java版中，地图的内容并没有存储在每个地图物品里，而是存储在**data**文件夹下。它们的文件名形如**map_i.dat**，i为不超过2,147,483,647（1.12中是32767）的自然数。i称为地图序号，游戏中每个地图物品都只是存储了对应的地图序号。
    
-   For example, if i hold a map with sequence number 3, when save is loaded, minecraft find the map data files named *map_3.dat* and load it, then its contents is shown on the map. So the essence of map is not map items, but map data files. 
+   比如，如果玩家拿着一个序号为114的地图，存档加载时Minecraft会寻找名为*map_114.dat*的地图数据文件并加载它。然后它的内容就会显示在地图上。因此，地图的本质不是物品，而是地图数据文件。
    
-   Almost everything of a map is stored in its map data file, including each pixel of it. To map pixel arts, the most important thing is how map pixels are stored.
+   地图几乎所有信息都存储在地图数据文件里，包括但不限于每个像素。地图画最重要的就是地图数据的存储方式。
 
-2. Map pixel and map color
+2. 地图像素与地图色（MapColor）
    
-   Each map pixel is a **8-bit unsigned integer**, ranging from 0 to 255. Since map data files are in compressed NBT format, map pixel are stored in an byte array with 16384 elements.(Although byte tag in nbt is signed 8-bit integer, just take is as unsigned). The 128 × 128 pixel array is stored in row major.
+   地图的每个像素都是一个8位无符号整数，取值范围为0到255。由于地图数据文件是压缩NBT格式，地图像素都存储在一个包含了16384个元素的字节数组（byte array)里（虽然NBT格式中的byte是有符号整数，但不妨当做是无符号）。这个128 × 128的像素矩阵以行优先方式存储。
    
-   That determines each pixel can have at most 256 colors, each value means a different color. **The 8bit unsigned integer is called map color.** We can say that map is a 8-bit index image with fixed palette. 
+   这决定了每个像素最多可能有256种颜色，每个值对应着不同的颜色。**这个8位无符号整数称为地图色。**我们可以说地图是一个颜色表固定的8位索引图像。
 
-3. Base color and shadow
+3. 基色（BaseColor）与阴影（Shadow）
    
-   Introduced as above, map color is a 8bit-integer. The first 6 bit of it formed an 6-bit unsigned integer, called base color, and the rest 2 bit formed another 2-bit unsigned integer, shadow. Their relation can be described by following equation:
+   如上文所述，地图色是8位无符号整数。它的高6位形成了6位无符号整数，称之为基色（BaseColor)，余下2位形成了2位无符号整数，称为阴影。地图色、基色和阴影的关系如下：
 
    $$
-   MapColor=4\times BaseColor+Shadow
+   地图色=4\times 基色+阴影
    $$ 
    
-   Base color is determined by the block type, there can be at most 64 base colors in minecraft. However up to now (1.17), there are 62 base colors used, each has a raw RGB color. There are 52 base colors used from 1.12 to 1.15, and 59 in 1.16, and 62 in 1.17. The unused base colors don't have corresponding blocks and colors, they are meaningless to map pixel arts. 
+   基色取决于方块类型。游戏中最多可能有64种基色。截止最新版（1.17），游戏中有62个基色已经被使用；在1.16，有69个基色被使用，每个基色都有对应的基色颜色（RGB）；从1.12到1.15，有52个基色被使用。未使用的基色没有相应的颜色，它们对地图画没有意义。
    
-   The relation of block, base color and its raw color is listed on wiki. See [Map Item Format](https://minecraft.fandom.com/wiki/Map_item_format).
+   wiki上有基色和方块的对照表：[地图物品格式](https://minecraft.fandom.com/zh/wiki/%E5%9C%B0%E5%9B%BE%E7%89%A9%E5%93%81%E6%A0%BC%E5%BC%8F).
 
-   But base color's raw color doesn't equal to map color's color. The R, G and B value of raw color is multiplied by a factor and divided by 255 (round down to integer) to become map color's color. The factor is determined by shadow value.
+   但基色颜色不等于地图色的颜色。基色颜色的R、G、B三个分量要分别乘一个因子，再除以255（向下取整）才能得到地图色的颜色。这个因子由阴影值决定。
 
-   | Shadow value | Factor |
+   | 阴影值 | 因子 |
    | :----: | :----: |
    | 0 | 180 |
    | 1 | 220 |
    | 2 | 255 |
    | 3 | 135 |
 
-   We can find that shadow 2 makes map color's color equals to raw color, while shadow 1 makes it darker, 0 more darker and 3 darkest.
+   可见，阴影值为2的地图色颜色等于基色颜色，阴影值1稍暗，阴影值0更暗，阴影值3最暗。
 
-   What does shadow mean? Shadow means the relative height among a block and its surrounding blocks. If block A's coordinate is $(x,y_A,z)$, and its north side block B$(x,y_B,z-1)$. The shadow value of A 
+   阴影有什么意义？阴影表示一个方块与周边方块的相对高度。如果方块A的坐标为$(x,y_A,z)$，它北侧方块B的坐标$(x,y_B,z-1)$，则A的阴影值
    $$
     Shadow(A)=\left\{
     \begin{aligned}
-        0\quad,&\quad \text{when } y_A<y_B \\
-        1\quad,&\quad \text{when } y_A=y_B \\
-        2\quad,&\quad \text{when } y_A>y_B
+        0\quad,&\quad \text{如果 } y_A<y_B \\
+        1\quad,&\quad \text{如果 } y_A=y_B \\
+        2\quad,&\quad \text{如果 } y_A>y_B
     \end{aligned}
     \right.
    $$
 
-   Among all base colors, water (12) is the most special one. Determined by water depth, Shadow value of water is unrelated to relative height. When depth is 1 s(one water block), shadow is 2; when depth is 6, shadow is 1; when depth is equal or greater than 11, shadow is 0.
+   在所有基色中，水（12）是最特殊的。**水的阴影值与相对高度无关，只由水深决定。** 水深1格时阴影值为2；水深6格时阴影值为1；水深等于或超过11格时阴影值为0。
 
-   Blocks are brighter when they are higher than their north side and darker when lower (when it comes to water, water is darken when deeper), **it enables map to show how landscape goes up and down.**
+   若一个方块比它北侧的方块高，那么它会表现的更亮；（水越浅越亮），**这让地图可以展示出地势的高低起伏**。
 
-   **Notice that shadow is a 2-bit integer, allowing 4 values but only 3 used. The leftover one, shadow 3 work normally on map, but can never be found in vanilla survival.** I really wonder why Mojang made this happen.
+   **需要注意，阴影是2位无符号整数，可以有4种取值，却只使用了前3个。剩下的那个阴影值3可以在地图上正常工作，但不可能在原版生存里获得。** 我很纳闷Mojang在想什么。
 
 4. Base color 0 is a special one
    
