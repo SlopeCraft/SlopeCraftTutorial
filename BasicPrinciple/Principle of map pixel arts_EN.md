@@ -122,7 +122,7 @@ Height compression is a new technology to decrease the maximum height of a 3D ma
    
    Lossless compression compresses an map art with effect unchanged. It will try to sink some segments in 3d map art.
 
-   Before compressing, SlopeCraft caculate each coloumn represently. In each coloumn, $\Delta H$ is caculated first and $H$ next. 
+   When compressing, SlopeCraft caculate each coloumn represently. In each coloumn, $\Delta H$ is caculated first and $H$ next. 
 
    $$
    \Delta H_i=\left\{

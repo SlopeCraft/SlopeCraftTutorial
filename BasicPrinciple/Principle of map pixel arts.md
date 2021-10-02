@@ -83,52 +83,52 @@ Minecraft地图画可以分为两类：视觉型和地图型。视觉型地图�
 
    **需要注意，阴影是2位无符号整数，可以有4种取值，却只使用了前3个。剩下的那个阴影值3可以在地图上正常工作，但不可能在原版生存里获得。** 我很纳闷Mojang在想什么。
 
-4. Base color 0 is a special one
+4. 0也是个特殊的基色
    
-   Greatly different to all base colors, 0 means air or unexplored. The raw color of base color 0 is  full-transparent, letting through the background color of map item. Many transparent blocks such as glass, nether portal, torches and so on belongs to base color 0. It's weird that redstone lamp also belongs to 0.
+   基色0代表**空气**或者**未探索**，与其他所有基色都截然不同。基色0对应的颜色是全透明，看到的只有地图物品的背景色（或物品展示框的材质）。很多透明方块都属于基色0，如玻璃、下界门、火把等。很奇怪的是，红石灯也属于基色0。
 
-5. Why is scaled maps meaningless?
+5. 为什么说缩放地图是没有意义的？
 
-   According to map mechanism, **scaling a map do no help to promote resolution and color counts**, it's a waste of blocks and rooms.
+   根据地图机制，缩放地图既不能提高地图分辨率，也不能带来更多颜色。所以按缩放后的尺寸建造更大的地图画，纯粹是浪费方块、浪费空间。
 
 <br>
 <br>
 
-## How do map art works?
-1. 3D map art mechanism
+## 地图画工作原理
+1. 立体地图画机制
    
-   In 3D maps, blocks are organized to form a pixel art. Each block plays 2 roles: 
-   - Displaying its base color
-   - Determine the south side block's shadow.
+   立体地图画中，方块按照特定位置放置，形成立体地图画。每个方块都有两个作用：
+   - 显示本身的基色
+   - 决定南侧方块的阴影
 
-   So you can see, the height of each block is not organized arbitrarily, but determined by map colors.
+   可见，每个方块的高度不是胡来的，而是地图色决定的。
 
-2. Flat map art mechanism
+2. 平板地图画机制
    
-   If you restrict that all map colors in map can only be shadow 1 (shadow 2 for water), you make a flat map. Every blocks have same aptitude.
+   如果你限定地图画只能由阴影为1的基色组成（或阴影为2的水），你就得到了平板地图画。每个方块都有相同的高度。
 
-3. File-only map art mechanism
+3. 纯文件地图画机制
    
-   Vanilla maps (3D and flat) make images shown by building blocks, that's the only way in vanilla survival. But if you don't attach importance to vanillaness, replacing map data files is acceptable. File-only map simply replace existing map data file(s) by generated file(s) to make your image displayed. **Only in this way can the third shadow be applied to map pixel arts.**
+   原版地图画（立体和平板）都是先建造，再用地图记录，这也的确是原版生存中唯一的办法。但如果你不要求这么香草，直接替换地图数据文件也是不错的选择。纯文件地图画直接把地图数据文件放进存档里，或者用生成的替换现有的地图数据文件，然后再用命令获得对应的地图物品。**这是使用第三种阴影的唯一方法。**
 
 <br>
 <br>
 
 
-## What is height compression?
-Height compression is a new technology to decrease the maximum height of a 3D map. Since large images often result to height over 256, it makes great sense. There're 2 compression methods: **lossless compression** and **lossy compression**.
+## 什么是高度压缩
+高度压缩是一种新技术，可以降低立体地图画的最大高度。鉴于大尺寸地图画很容易超过限高，压缩是很有意义的。目前压缩有两种方式：**无损压缩**和**有损压缩**。
 
-1. Lossless compression
+1. 无损压缩
    
-   Lossless compression compresses an map art with effect unchanged. It will try to sink some segments in 3d map art.
+   无损压缩保持地图显示效果完全不变。它尝试将地图的某些片段下沉。
 
-   Before compressing, SlopeCraft caculate each coloumn represently. In each coloumn, $\Delta H$ is caculated first and $H$ next. 
+   压缩时，SlopeCraft依次独立处理地图画的每一列。
 
    $$
    \Delta H_i=\left\{
       \begin{aligned}
-         Shadow_i-1\quad &,\quad \text{when }BaseColor_i\neq 0,12 \\
-         0 \quad &,\quad \text{else}
+         Shadow_i-1\quad &,\quad \text{如果 }BaseColor_i\neq 0,12 \\
+         0 \quad &,\quad \text{其他情况}
       \end{aligned}
       \right.
 
@@ -139,31 +139,33 @@ Height compression is a new technology to decrease the maximum height of a 3D ma
    maxHeight=\max H
    $$
 
-   In formula above, $\Delta H$ refers to height difference and $H$ refers to the actual height of each block. The formula has a little difference to source code, but the principle doesn't change.
+   上式中，$\Delta H$是每个方块与自己北侧方块的高度差，$H$是每个方块的高度。这个公式与实际源代码略有差别，但基本原理一致。
 
-   The formula restrict that height difference must be -1, 0 or 1, but such restriction isn't a must. For example, a shadow-2-block only requires its height difference to be a positive number, it don't have to be 1. This provides us a chance to compress the maximum height losslessly.
+   上面的公式限定了高度差必须为-1，0或者1，但这种限制不是必须的。例如，阴影2的方块只要求自己与北侧方块的高度差大于0，但不一定是1。这就提供了无损压缩的机会。
 
-   Lossless compression also apply special process to water and air as their shadow values are unrelated to relative height. Although these special blocks increased the difficulty to compression, map with air or water will be compressed better.
+   无损压缩还会特殊处理水和空气方块，因为它们的阴影值与高度差无关。虽然这让代码实现难度高了不少，但压缩效果会更好。
 
-   **Lossless compression can not ensure to deflate all maps down to 256, sometimes a column of map is even uncompressible.**
+   **请注意，无损压缩不能绝对保证把高度压缩到256以内。有时候地图画的一列甚至可能是单调递增/递减，根本就不可压缩。** 
 
-2. Lossy compression
+2. 有损压缩
    
-   Obviously lossless compression doesn't solve the problem completely. To compress the maximum height down to any value, modifying map color of several pixel is acceptable. Lossy compression algorithm deflate the maximum height by changing some pixel slightly, minimizing the sum color difference.
+   显然，无损压缩没有彻底解决问题。为了把地图画总高度压缩到任何值以内，微调一些像素的颜色也是可以接受的。有损压缩算法会细微调整一些像素的地图色来压缩总高度，并保证色差尽量小。
 
-   **Lossy compression is able to deflate most maps don to any maximum height.** Implemented on genetic algorithm, it behaves slightly randomly and relatively slow.
+   **有损压缩可以把地图画压缩到任何高度以内。** 介于是用遗传算法实现，有损压缩的表现有些随机，且相对缓慢。
 
-   Although it can deflate down to any maximum height theoretically, **it's not recommended to set the maximun allowed height less than 14**, otherwise my genetic algorithm will spend a long long time to compress -- or even fail.
+   尽管理论上可以把总高度压缩到任意值，但我**不建议你把最大允许高度设为小于14的值**，否则遗传算法需要相当长长长长长的时间来压缩————甚至可能压缩失败。
 
-   **Long may the GENETIC ALGORITHM!**
+   **遗传算法，永远滴神！**
 
-Notice that 2 methods above are parallel, which means that **you can compress with both methods, or with single method**. If you enabled lossy compression, it's a good choice to enable lossless compression, it will make lossy compression **do less harm to the final map art quality**.
+值得一提的是，上述两种方法是平行的，你可以同时使用两种压缩算法，也可以只使用一种。如果你已经启用了有损压缩，建议顺手勾上无损压缩，这可以降低有损压缩对画质的损伤。
 
 <br>
 <br>
 
-## Glass Bridge in 3D map
+## 立体地图画中的玻璃桥
 
-If you slice a 3d map horizontally, you will see many separate blocks on the cross-section. Such strcuture is really hard to build in vanilla survial, even with the help of litematica mod. If we connect these separate blocks, it will be easier to build. 
+取立体地图画任一水平切面，不难发现，切面上有很多孤立的方块。这种结构真的很难在原版生存建造，即便有投影mod辅助也是如此。**但如果我们将这些孤立的方块连接起来，就比较容易建造了。**
 
-Glass bridge is the connection. Using prim algorithm, SlopeCraft connects all blocks in a layer with minmum amount of glass blocks. Usually, glass bridges aren't constructed in every layer, otherwise it's a waste of glass blocks. Since prim algorithm has a time complexity of $O(n^3)$, it is a time-consuming process in building 3d structure. However, comparing to the time of building it in vanilla survival, it saves time actually.
+玻璃桥就是这个“连接”。使用Prim算法可以用最少的玻璃把一层内所有方块都连接起来，这个过程就叫搭桥。通常来说不是每个层都要搭桥，否则会浪费很多玻璃。默认间隔4层，即每5层搭一次桥。
+
+考虑到Prim算法的时间复杂度为$O(n^3)$，这会耗费些时间。不过比起建造的肝度，实际上还是节省时间的。
