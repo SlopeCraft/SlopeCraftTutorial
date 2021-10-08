@@ -81,6 +81,44 @@ The relationship between aixs and map are as follows:
 
    Blocks are brighter when they are higher than their north side and darker when lower (when it comes to water, water is darken when deeper), **it enables map to show how landscape goes up and down.**
 
+   The following example might be helpful:
+
+   We represent a vertical slice like thiss:
+
+   ⬜🟥🟧🟨🟩⬛🟦🟪🟫
+
+   ```
+   ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜🟫⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜
+   ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜🟫⬜🟫⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜
+   ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜🟫⬜⬜⬜🟫🟫🟫🟫🟦⬜⬜⬜⬜⬜⬜
+   ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜🟨🟧🟫🟫⬜🟫⬜⬜⬜⬜⬜⬜⬜⬜⬜⬛⬜⬜⬜⬜⬜
+   ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜🟫⬜⬜⬜⬜🟫⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜🟫⬜⬜🟫⬜
+   ⬜⬜⬜⬜🟫⬜⬜⬜⬜🟫⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜🟫🟫⬜🟫
+   ⬜⬜⬜🟫⬜🟫🟫⬜🟫⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜
+   🟩⬜🟫⬜⬜⬜⬜🟥⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜
+   ⬜🟫⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜
+   ```
+   Blocks are displayed from north (left) to south (right).
+
+   In the slice above, different symbols refer to different blocks:
+
+   | Symbols | Block |
+   | :----: | :----: |
+   | ⬜ | Air |
+   | 🟫🟥🟧🟨🟪⬛ | Non-liquid blocks in map |
+   | 🟩 | Stone block in the north edge of map (out of map) |
+   | 🟦 | Water |
+
+   The red block is lower than its north neighbour, so it has shadow 0.
+
+   The yellow block is higher than its north neighbour, so it has shadow 2.
+
+   The orange block is as high as its north neighbour, so it has shadow 1.
+
+   The black block is lower than its north neighbour (water block), so it has shadow 0.
+
+   The water block is a one-block-depth water coloumn, although its as high as its north neighbour, water block's shadow has no relation with neighbour blocks. So it has shadow 2. 
+
    **Notice that shadow is a 2-bit integer, allowing 4 values but only 3 used. The leftover one, shadow 3 work normally on map, but can never be found in vanilla survival.** I really wonder why Mojang made this happen.
 
 4. Base color 0 is a special one
