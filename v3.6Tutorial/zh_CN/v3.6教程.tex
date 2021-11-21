@@ -2,6 +2,7 @@
 \usepackage{geometry}
 \usepackage{fancyhdr}
 \usepackage{verbatim}
+\usepackage{enumerate}
 
 \geometry{papersize={210mm,297mm}}
 \geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
@@ -35,8 +36,35 @@
     
     除此以外，v3.6还修改了界面的操作逻辑。加之上一版教程还是v3.1，我认为有必要写个新的教程。
 
-    这篇教程不是“傻瓜式”的，我只介绍必须介绍的。所有\textbf{加粗}的内容都是一定要注意的、不注意就会出错的重点。
+    这篇教程不是“傻瓜式”的，我只介绍必须介绍的，强调必须强调的。
 
     \pagebreak
-    page 2
+    \section{SlopeCraft v3.6更新内容}
+    新内容：
+
+    \textbf{SlopeCraftL3.dll}——SlopeCraft的内核开发成了通过接口类调用的\textbf{动态链接库}，随应用程序一同发布，包含了立体、平板、纯文件地图画和墙面像素画的核心功能，理论上应该能被C++、Java、Python等语言调用（顶多再套一层接口），后来者可以\textbf{少造轮子}了！
+
+    新功能：
+    \begin{enumerate}
+        \item 智能有损压缩——\textbf{彻底解决超限高问题}
+        \item 搭桥——\textbf{方便建造立体地图画}
+        \item 防火/防末影人——用玻璃块包围\textbf{易燃方块}和\textbf{可被小黑偷走}的方块
+        \item 导出为.NBT格式——\textbf{Litematica}和\textbf{原版结构方块}可以用，WorldEdit不知
+        \item 自定义方块列表——更加自由，想要什么方块\textbf{自己加}
+        \item 检查更新、反馈Bug——请认准GitHub仓库
+        \item 更加完善的报错系统——\textbf{报错信息不是天书！}
+        \item 启动时自动设置语言——默认简体中文，如果系统语言没有汉语，那就英文
+        \item settings.json——启动时的配置文件
+        \item 新的像素画类型：墙面像素画——不伦不类的怪物，偏偏很多人想要这个功能
+    \end{enumerate}
+    修复Bug：
+    \begin{enumerate}
+        \item 修复了无法禁用部分颜色的Bug——重写了方块列表的逻辑 
+    \end{enumerate}
+    优化和其他更改：
+    \begin{enumerate}        
+        \item 优化了转化图片和搭桥的性能——感谢AbrasiveBoar902
+        \item 删除了可去掉的“确认”按钮，节省操作
+        \item 等待用户操作时进度条不再显示为繁忙状态，更符合操作习惯
+    \end{enumerate}
 \end{document}
