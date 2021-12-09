@@ -1,4 +1,5 @@
-\documentclass[UTF8]{ctexart}
+%\documentclass[UTF8]{ctexart}
+\documentclass{article}
 \usepackage{geometry}
 \usepackage{fancyhdr}
 \usepackage{verbatim}
@@ -18,7 +19,7 @@
 
 \setlength{\headheight}{13pt}
 
-\title{SlopeCraft v3.6教程}
+\title{SlopeCraft v3.6 UserGuide}
 \author{TokiNoBug}
 \date{\today}
 
@@ -44,65 +45,66 @@
     %%%%%%%%%%%%%%%%%%%%%%%
     % Page1
     %%%%%%%%%%%%%%%%%%%%%%%
-    SlopeCraft v3.6是一个重大更新，整个程序都被重构了一遍，增加了许多硬核的功能，解决了不少棘手的麻烦：v3.6实现了期盼已久的有损压缩功能，可以把地图画总高度压缩到几乎任何值，彻底解决了地图画超出限高的问题；v3.6加入了“搭桥”功能，可以辅助玩家建造……
+    SlopeCraft is such a great update that the whole software is rewritten again with Many hardcore functions implemented and lots of bugs fixed. In this version, lossy compression is added to compress total height of a 3D map to almost any arbitrary value, which entirely sloves the problem that 3D map often got higher than the world. Also, glassbridge is added in order to assitant player when building.
     
-    除此以外，v3.6还修改了界面的操作逻辑。加之上一版教程还是v3.1，我认为有必要写个新的教程。
+    Besides, ui is slightly changed. Since the last tutorial is for v3.1, it's necessary to write a new user guide.
 
-    这篇教程不是“傻瓜式”的，我只介绍必须介绍的，强调必须强调的。
+    By the way, this tutorial is not a fool-type one, only those must be introduced are introduced and those must be underlined are underlined. If any question, view a previous tutorial.
 
     %%%%%%%%%%%%%%%%%%%%%%%
     % Page2
     %%%%%%%%%%%%%%%%%%%%%%%
     \pagebreak
-    \section{v3.6更新内容简介}
-    \paragraph{新内容}
-    \textbf{SlopeCraftL3.dll}——SlopeCraft的内核开发成了通过接口类调用的\textbf{动态链接库}，包含了立体、平板、纯文件地图画和墙面像素画的核心功能，理论上应该能被C++、Java、Python等语言调用（C++亲测可用，其他语言顶多再套一层接口），以后的插件可以\textbf{少造轮子}了！
+    \section{Update Summary}
+    \paragraph{New Contents}
 
-    \paragraph{新功能}
+    \textbf{SlopeCraftL3.dll}——The kernel of SlopeCraft is developed into a dynamic linked library through a interface class, including core functions of 3d, flat, file-only and wall maps. Theoretically, this lib can be called by not only C++ but also Java and Python and so on.(When it comes to other languages, one more layer of interface might be required). Future plugins will have one more choice.
+
+    \paragraph{New Functions}
     \begin{enumerate}
-        \item 第61个基色：\textbf{发光地衣}——补上了v3.5.1的遗漏
-        \item 智能有损压缩——\textbf{彻底解决超限高问题}
-        \item 搭桥——\textbf{方便建造立体地图画}
-        \item 防火/防末影人——用玻璃块包围\textbf{易燃方块}和\textbf{可被小黑偷走}的方块
-        \item 导出为.NBT格式——\textbf{Litematica}和\textbf{原版结构方块}可以用，不知WorldEdit是否可用
-        \item 方块增加了各种\textbf{下半砖}
-        \item 自定义方块列表——更加自由，想要什么方块\textbf{自己加}
-        \item 构建三维结构时预览地图画——\textbf{有损压缩可能会微调画面内容}
-        \item 检查更新、反馈Bug——请认准\href{https://github.com/ToKiNoBug/SlopeCraft}{GitHub仓库}
-        \item 更加完善的报错系统——\textbf{报错信息不是天书！}
-        \item 启动时自动设置语言——默认简体中文，如果系统语言没有汉语，那就英文
-        \item settings.json——启动时的配置文件
-        \item 新的像素画类型：墙面像素画——其实有点不伦不类，偏偏很多人想要这个功能
+        \item The 61th basecolor
+        \item Intelligent lossy compression
+        \item Glassbridge construction——\textbf{Easy to build 3d maps}
+        \item Fireproof and enderman-proof——cover vulnerable blocks with glass.
+        \item Export as .NBT format——Minecraft structure block format.
+        \item All kinds of \textbf{Upper slabs} to blocklist.
+        \item Customizable blocklist——add any block if you like.
+        \item Preview map when constructing 3d structure——\textbf{Lossy compression may edit it slightly}
+        \item Check for updates and report bugs——by subject to \href{https://github.com/ToKiNoBug/SlopeCraft}{repository on GitHub}.
+        \item More complete error-reporing function.
+        \item Reset language automatically when starting——if Chinese isn't found in system language, English instead.
+        \item settings.json——config files for starting.
+        \item New map type: wall maps——kind of weird but requested for many times.
     \end{enumerate}
-    \paragraph{修复Bug}
+    \paragraph{Bug Fixed}
     \begin{enumerate}
-        \item 修复了无法禁用部分颜色的Bug——重写了方块列表的逻辑 
+        \item Fixed the bug that may colors can't be disabled.
     \end{enumerate}
-    \paragraph{优化和其他更改}
+    \paragraph{Optimization and Other Changes}
     \begin{enumerate}        
-        \item 优化了转化图片和搭桥的性能
-        \item 删除了可去掉的“确认”按钮，节省操作
-        \item 等待用户操作时进度条不再显示为繁忙状态，更符合操作习惯
+        \item Optimized the performance of converting and constructing glassbridge.
+        \item Deleted unnecessary \textbf{Confirm} buttons. Less opeartions required now.
+        \item Progessbars are no longer in busy state when waitting for user's operation. More suited for users now.
     \end{enumerate}
 
     \pagebreak
     %%%%%%%%%%%%%%%%%%%%%%%
     % Page3
     %%%%%%%%%%%%%%%%%%%%%%%
-    \section{初级教程}
-    \subsection{导入图片}
-    从上一个教程（v3.1）到v3.6，最大的变化其实还是多了个“设置”按钮，用来更好的处理原图中\textbf{透明像素}。
+    \section{Junior Tutorial}
+    \subsection{Import Image}
+    From the previous tutorial to now, the greatest change is still a new button \textbf{Settings}, which is used to process transparent pixels better.
  
-    点击\textbf{设置}按钮，可以看到子窗口，如图\ref*{SetTPS}：
+    Click \textbf{Settings} and you will see a subwindow as figure \ref*{SetTPS}.
 
     \begin{figure}[htbp]
         \centering
         \includegraphics[width=15cm]{Img1_TPS.png}
-        \caption{设置透明像素处理策略的界面}
+        \caption{Subwindow to set transparence processing strategy}
         \label{SetTPS}
     \end{figure}
     
-    \textbf{请注意：如果你要按照自定义的策略导入含全透明/半透明像素的图片，务必先设置透明像素处理策略，后导入图片！否则图片只会按照默认的处理策略处理！如果已经导入了图片才重新设置处理策略，请重新导入图片。}
+    \textbf{Note: If you want to import a image with transparency under custom transparency processing strategy, you must set the strategy first and then import you image! Otherwise the image will only be preprocessed by the default strategy! If you set the strategy after having your image imported, import you image again.}
 
     透明像素处理策略有不同的方法处理纯透明像素（alpha=0）和半透明像素（alpha>1）。纯透明像素要么替换为背景色，要么设为空气；半透明像素既可以替换为背景色，也可以与背景色叠加融合，还可以忽略掉它的透明度属性，直接当做不透明像素。另外也可以设置背景色，默认背景色是雪块平铺时的浅灰色，也可以选择纯白色，或者任何自定义颜色。
 
