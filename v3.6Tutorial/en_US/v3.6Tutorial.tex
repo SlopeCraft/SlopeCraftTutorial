@@ -128,22 +128,20 @@
     
     Dithering uses Floyd-Steinberg algorithm, it tries to fit the orignal image better through mixing several similar colors.
     
-    这里以\href{https://t.bilibili.com/544583492149793294}{Lancet\_Corgi画的图}为例。（\href{https://space.bilibili.com/37171000}{Lancet\_Corgi的b站主页}，感谢\~）
+    Here we take picture drawn by \href{https://t.bilibili.com/544583492149793294}{Lancet\_Corgi} as an example(Thanks to Lancet\_Corgi, here's \href{https://space.bilibili.com/37171000}{his homepage on BiliBili})
     
     \begin{figure}[htbp]
         %\addtocounter{figure}{-1}
         \centering
         \setcounter{subfigure}{0}
-        \subfigure[原图]{
+        \subfigure[Before Convertion]{
             \begin{minipage}[t]{7cm}
                 \centering
-                \includegraphics[width=6cm]{Img3_Raw.png}
-                %\caption{原图}
-                
+                \includegraphics[width=6cm]{Img3_Raw.png}                
                 \label{ruby_raw}
             \end{minipage}
         }
-        \subfigure[转化后]{
+        \subfigure[After Convertion]{
             \begin{minipage}[t]{7cm}
                 \centering
                 \includegraphics[width=6cm]{Img4_Converted.png}
@@ -151,53 +149,53 @@
                 \label{ruby_converted}
             \end{minipage}
         }
-        \caption{导入原图并按RGB+算法（无抖动）转化}
+        \caption{Convert using RGB+(dithering disabled)}
     \end{figure}
     
-    \subsection{导出三维结构}
-    若想要把地图画保存为\textbf{.Litematic}（投影mod）、\textbf{.nbt}（结构方块）格式，须先点击\textbf{构建三维结构}，然后再\textbf{导出}。构建三维结构完成之后会自动弹出预览窗口，可以查看材料表，也可以查看地图画。
+    \subsection{Export 3D structure}
+    If you hope to save the map in \textbf{.Litematic}(for Litematica mod) or \textbf{.nbt}(for Minecraft strcuture block) format, you should click \textbf{Build 3D} and then \textbf{Export}. When finished building, SlopeCraft will send you a preview window where you can see the material list and map.
 
     \begin{figure}[htbp]
         \centering
         \includegraphics[width=15cm]{Img2_Export3D.png}
-        \caption{导出三维结构界面}
+        \caption{Interface of Exporing 3D}
     \end{figure}
 
-    压缩高度一栏增加了\textbf{智能有损压缩}；增加了\textbf{搭桥}选项；增加了\textbf{防火}和\textbf{防末影人}选项。 在主进度条的右侧多了一个子进度条，表示有损压缩/搭桥的进度。
+    In this interface, \textbf{Intelligent Lossy Compress} and \textbf{Construct Glass Bridge} are added. And some other options like \textbf{Fire Proof} and \textbf{Enderman Proof} are added. A new sub progress bar is used to show the progress of lossy compression and construction of glass bridge.
         
-    \subsubsection{压缩}
-    简单来说，无损压缩是在\textbf{严格保证每个像素颜色不变}的前提下，以连续性为代价，压缩地图画总高度，但它约束较大，未必如愿。毫不夸张的说，有些图片是不可压缩的，比如纯白色的部分。这时候就需要新的压缩技术：智能有损压缩。
+    \subsubsection{Compression}
+    Simply put, lossless compression is to compress the total height of 3D map at the cost of consecutiveness while \textbf{keeping colors of each pixel strictly unchanged}. It's a really rigorous restriction so it may fail to reach your expectation. It's no exaggeration to say that some images are mathematically uncompressable, like full-white parts. Then new compress technology is required: intelligent lossy compression.
 
-    有损压缩则\textbf{微调个别像素的颜色}，压缩地图画总高度，使其小于等于用户指定的最大允许高度。有损压缩使用遗传算法实现，属于群体人工智能，是目前SlopeCraft中技术含量最高的模块。最大允许高度不要低于14，否则立体地图画很可能压缩失败。
+    Different with the lossless one, lossy compression compress by \textbf{slightly modifying some pixel}, to make the total height no greater than the maximum allowed height(MAH) which is assigned by you. Genetic algorithm, which belongs to swarm intelligence, is employed to implement lossy compression. So you can see it's a speacial part of SlopeCraft with most technical content. The MAH should be no less than 14, otherwise your 3D map still have some probability of failing to be compressed.
 
-    一般来说，有损压缩的最大允许高度越小，画质损失越明显。如下，这张图若做成立体地图画，高度是255格，现在进行有损压缩（同时启用无损压缩）。图\ref*{ruby_max100}为最大高度100格时的构建结果，图\ref*{ruby_max20}为最大高度20格时的构建结果。
+    In general, the less MAH is, the more quality loss in your map. For example, is this map is made into a 3D map, its height will be 255. Now we compress it with both lossy and lossless algorithm. Firgue \ref*{ruby_max100} shows the result when MAH=100, and \ref*{ruby_max20} shows when MAH=20.
 
     \begin{figure}[htbp]
         \centering
-        \subfigure[最大100格]{
+        \subfigure[MAH=100]{
             \begin{minipage}[t]{7cm}            
                 \centering
                 \includegraphics[width=6cm]{Img6_Compressed_100.png}
                 \label{ruby_max100}
             \end{minipage}
         }
-        \subfigure[最大20格]{
+        \subfigure[MAH=20]{
             \begin{minipage}[t]{7cm}
                 \centering
                 \includegraphics[width=6cm]{Img5_Compressed_20.png}
                 \label{ruby_max20}
             \end{minipage}
         }
-        \caption{最大允许高度对画质的影响}
+        \caption{MAH's effect to picture quality}
     \end{figure}
 
-    压缩前后图片没有显著变化，画质损伤不明显。但仔细观测仍可以发现，左右两侧留白部分出现了一些灰点，且图\ref*{ruby_max20}由于压缩程度高，灰点较图\ref*{ruby_max100}更多。另外，遗传算法是一种随机优化算法，被修改像素有一定随机性，不会呈现明显的规律图样。
+    There's no obvious difference before and after the compression. But you can still find that some gray dots appear on the left and right side. You can learn that the number of gray dots has a negative relation with MAH. Otherwise, as genetic algorithm is a stochastic optimizing algorithm, there's some randomness in which pixel will be modified and regular pattern won't appear.
 
-    有损压缩和无损压缩可以搭配使用，也可以分别独立使用。但一般来说，如果启用了有损压缩，没道理不启用无损压缩。纯有损压缩需要修改更多的像素，对画质的损伤会比较大，无损压缩能在修改像素更少的情况下完成压缩任务，很大程度上减轻画质损伤。
+    Lossy and lossless compression can be used either together or respectively. But in general, if you have already enabled lossy one, there's no way to disable the lossless one. Lossy compression without lossless will make a lot more pixels modified, bringing more quality loss, while the lossless counterpart make the compression be finished with less pixel modified and less quality loss.
     
-    平板地图画和墙面像素画可以勾选这两个选项，但\textbf{不会发挥任何作用}。
+    You can choose these options with flat map or wall map, but they \textbf{won't take any result}.
 
-    \subsubsection{搭桥}
+    \subsubsection{Construct the Glass Bridge}
     立体地图画的每个水平截面上都有很多分散的方块，极不方便建造，倘若能用多条通路连接这些分散的方块，无疑能让建造更加容易。搭桥就是在一个水平面内用玻璃方块连接所有方块，形成通路从而辅助玩家建造的过程。
     
     毫无疑问，搭桥会消耗额外的玻璃，因此不推荐在立体地图画的每一层都执行搭桥。默认每间隔4层搭一次桥，你也可以修改这个间隔。间隔过大，辅助搭桥的效果会减弱；间隔过小，浪费玻璃。
