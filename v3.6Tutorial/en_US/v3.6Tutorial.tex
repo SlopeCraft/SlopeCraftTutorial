@@ -106,26 +106,27 @@
     
     \textbf{Note: If you want to import a image with transparency under custom transparency processing strategy, you must set the strategy first and then import you image! Otherwise the image will only be preprocessed by the default strategy! If you set the strategy after having your image imported, import you image again.}
 
-    透明像素处理策略有不同的方法处理纯透明像素（alpha=0）和半透明像素（alpha>1）。纯透明像素要么替换为背景色，要么设为空气；半透明像素既可以替换为背景色，也可以与背景色叠加融合，还可以忽略掉它的透明度属性，直接当做不透明像素。另外也可以设置背景色，默认背景色是雪块平铺时的浅灰色，也可以选择纯白色，或者任何自定义颜色。
+    We have various method to deal with full-transparent pixels(alpha=0) and semitransparent pixels(alpha>0). The former are either replaced with background color or air block, while the latter have 3 choices: to be replaced with background color, to be composed with background color, or to be taken as non-transparent pixel by ignoring its alpha channel. Besides, the background color is also customizable. In default it's light gray.
 
-    强调一下，原图中\textbf{每个像素对应着地图画的一个方块}，导入图片之前需要自己裁剪、缩放图像，图片的长和宽最好是\textbf{128像素的整数倍}（不是强制要求）。这一步预处理应当由用户自己完成，我不在软件中实现这个功能，也不存在任何缩放图像的操作，SlopeCraft忠实的映射\textbf{每个像素}。
+    Please note that each \textbf{pixel corresponds to a block in map}. Since the width and height are recommended to be any \textbf{multiple of 128 pixels}, you should better cut and scale you image before importing into SlopeCraft.(Recommended but not forced) This preprocessing should be done by user instead of software, so I don't and won't implement such function in SlopeCraft. As a result, there is not any resizing or scaling operation in SlopeCraft, \textbf{each pixel} shall be reflected faithfully.
 
-    \subsection{设置地图画类型}
-    地图画类型中多了一项墙面像素画，除此以外没有改动。只需要按说明设置地图画类型及版本，然后直接跳转到下一页即可。
+    \subsection{Set Map Type}
+    The only modification is that a new kind of map (wall maps) is added. You just need to choose the right map type and game version following the description on ui, then turn to the next page.
 
-    设置方块列表页面补加了第61个基色：发光苔藓。这是1.17已经添加的基色，但v3.5.1漏了。
-    请注意方块列表的逻辑：灰色的按钮/选择框代表锁定、不可更改的，如基色0（透明）必须启用。SlopeCraft要求每种基色必须有对应的方块，哪怕这种基色本身被禁用。因此如果某个基色只有一种方块可选，那个唯一的单选框也是锁定的。
-    
-    如果一种方块版本过高，它同样会变为灰色，不可选择。有必要指出，有些方块是墙面像素画不能使用的，如铁质压力板、发光苔藓等。这时限制颜色数量的不是基色/地图色本身的性质，而是你所选的方块。
+    The 61th base color: GLOWING\_LICHEN is complemented to the blocklist page. Actually it was already added in Minecraft v1.17 but I left it in SlopeCraft v3.5.1.
 
-    \subsection{调整颜色}
-    调整颜色界面也没有值得一提的改变。
+    The logic of block list: a disabled checkbox or radiobutton mean locked or unchangeable, for example, basecolor 0(air) must be enabled. SlopeCraft requires that each basecolor must have a block eventhough the basecolor is disabled. Thus, if a basecolor has only one available block, that single radiobutton will fixed.
     
-    首先选择好转化算法，然后选择是否启用抖动，点击\textbf{转化}，等待转化完成，就可以选择你想要的导出方式。
+    If a block's version is later than the game version, is will also be disabled. Note that not all block can be used in wall maps, like iron pressure plate and glowing lichen. In such condition, it's not only properties of basecolors and maps themselves but also your selected blocks that restrict your available color count.
+
+    \subsection{Color Convertion}
+    There's no modification on the page of convertion. Just operate like before.
     
-    六个转化分别对应着六种不同的色差公式。算法中RGB+最为推荐，RGB和XYZ速度最快，Lab94和Lab00效果较好但性能较慢，HSV效果一直不太理想，不太推荐。
+    First, select a converting algorithm, then set whether to enable dithering or not. Then click \textbf{Convert}, after the convertion is finished, export in the way you want.
+
+    The 6 converting algorithms respectively correspond to 6 different color difference formulations. Among them, RGB+ is best recommended, RGB and XYZ have best speed while Lab94 and Lab00 have releatively good effect but are slow in speed. The HSV algorithm hasn't been working well for a long time, so it's not recommended.
     
-    抖动则使用Floyd-Steinberg算法，尝试用几种将近的颜色掺混，试图更好的贴合原图。
+    Dithering uses Floyd-Steinberg algorithm, it tries to fit the orignal image better through mixing several similar colors.
     
     这里以\href{https://t.bilibili.com/544583492149793294}{Lancet\_Corgi画的图}为例。（\href{https://space.bilibili.com/37171000}{Lancet\_Corgi的b站主页}，感谢\~）
     
