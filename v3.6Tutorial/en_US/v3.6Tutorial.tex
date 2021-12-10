@@ -233,81 +233,85 @@
    \end{figure}
 
    \begin{itemize}
-       \item Obtain map using /give command:
+       \item Get map using /give command:
        
+       The beginning sequence number can be set arbitarary as soon as no unreleated map will be covered.
        起始序号可以随意设置，只要不覆盖掉无关的地图。
        \begin{enumerate}
-           \item 在1.12，使用 /give @s filled\_map 1 i 来获得序号为i的地图。
-           \item 在1.13+，使用 /give @s filled\_map\{map:i\} 来获得序号为i的地图。
+           \item 1.12 command: /give @s filled\_map 1 i
+           \item 1.13+ command: /give @s filled\_map\{map:i\}
        \end{enumerate}
-       \item 如果你不想使用命令，只替换地图文件：
+       \item If you want to simply replace map data files instead of using commands:
        \begin{enumerate}
-           \item 先创建与地图画对应的n个地图，n就是SlopeCraft显示的地图文件数量，在本例中是4。
-           \item 在游戏中按下F3+H，查看地图文件对应的序号。这些地图对应的序号应当是 a\textasciitilde(a+n-1) ，共n个。
-           \item 关闭游戏，在SlopeCraft的\textbf{地图文件起始序号栏}中填入a的值。
-           \item 点击导出，选中存档下的data文件夹。SlopeCraft将会替换掉这n个地图文件。
-           \item 关闭SlopeCraft，打开游戏，这n个地图应当已经被成功的替换为地图画。
-           \item 如果你担心输错地图文件序号，导致无关的地图被覆盖掉，你可以先新建一个临时的文件夹，在导出时选择这个临时文件夹。确认地图序号无误后，再复制黏贴替换掉你要替换的地图文件。
+           \item Create n map items correspond to your image where n is the map count, it's 4 in this instance.
+           \item Press F3+H to check the map sequence number of map items you've just created, their sequence numbers should be a\textasciitilde(a+n-1), n in total.
+           \item Close Minecraft and fill the value of a in the \textbf{Beginning Sequence Number} branket.
+           \item Click export and then select data folder under you save. SlopeCraft will replace these map data files. 
+           \item Close SlopeCraft and start Minecraft, these map items will be replaced with map pixel arts successfully.
+           \item If you are afraid of your misoperation which may lead to unreleated map being covered, you can create a temporary folder and then selected when exporting. Repleace the map data files you want to replace after you're sure that no error occurres.
        \end{enumerate}
    \end{itemize}
    
    \pagebreak
-   \section{高级功能}
-   如果你只是简单的使用SlopeCraft，掌握初级功能足矣；但如果你需要自定义一些东西，那么你最好阅读下这一节。使用高级功能往往需要理解地图画的基本原理，我强烈建议你先看完\href{https://github.com/ToKiNoBug/SlopeCraftTutorial/blob/main/BasicPrinciple/Principle%20of%20map%20pixel%20arts.md}{地图画原理}。
+   \section{Advanced Functions}
+   Basical function is enough if you just want to use SlopeCraft simply. However, if you want to customize something, you'd better have a look at this section. Using advanced functions usually requires understanding of map arts' principles. It's strongly recommended to read \href{https://github.com/ToKiNoBug/SlopeCraftTutorial/blob/main/BasicPrinciple/Principle%20of%20map%20pixel%20arts.md}{Principle of map pixel arts}.
 
-   \subsection{自定义方块列表}
-   如果你不满足于我预设的那些方块，想要自己添加其他的原版方块甚至mod方块，这一章会告诉你怎么在SlopeCraft中添加并使用自定义的方块。
+   \subsection{Customize blocklist}
+   If you aren't satisfyed with default blocks, which means that you hope to add other vanilla blocks or mod-blocks, this section will tell you what to do.
    
-   \subsubsection{前置信息}
-   你需要掌握方块的以下信息：
+   \subsubsection{Pre-informations}
+   You must master following information first:
 
    \begin{enumerate}
-       \item 方块的\textbf{完整}id，包含\textbf{命名空间前缀}以及\textbf{所有方块属性}。
+       \item \textbf{Complete} id of this block, including \textbf{namespace prefix} and \textbf{all block properties}.
        
-       如涂蜡铜块上半砖：
+       For instance, waxed copper slab:
        
        minecraft:waxed\_copper\_slab[type=top,waterlogged=false]
 
-       这里面minecraft:是原版方块的命名空间前缀，中括号里的内容是所有方块属性。保险起见，你应当给每个方块属性都设置对应的值。
-       \item 方块最早出现的游戏版本。
-       
-       SlopeCraft在方块列表中约定了以下几个值代指大版本：
+       Here minecraft: is the namespace prefix of vanilla blocks, contents in the brackets are all block properties. For safety reason, you should set a value for every block properties.
+
+       \item The earliest Minecraft version when this block is added.
+
+       SlopeCraft assigned the following numbers as references of several Minecraft versions:
        \begin{table}[h]
         \centering
-        \caption{数字与版本的关系}
+        \caption{Numbers and versions}
         \label{VerAndRealVer}
         \begin{tabular}{cc}\hline
-            数字 & 版本 \\ \hline
-            0 & 早于1.12 \\
+            Number & Version \\ \hline
+            0 & Earlier than 1.12 \\
             12 & 1.12 \\
             13 & 1.13 \\
             14 & 1.14 \\
             15 & 1.15 \\
             16 & 1.16 \\
             17 & 1.17 \\
-            255 & 未来版本 \\
+            255 & Future version \\
             \hline            
         \end{tabular}
        \end{table}
 
-   正常情况下，你不应该使用255，它只是一个预留的值。如果你非要给一个方块指定为未来版本，那么导致的一切都属于未定义特性——我也不知道会发生什么。
+   Usually you shouldn't use 255, it's just a reserved value. If you insist to do so, then everyting will be undefined features ---- I don't know what will happen.
 
-   \item 方块在1.12的id
+   \item Block id in 1.12.
    
-   添加这个属性是因为Mojang从1.12更新到1.13修改了相当多方块的id。如果你要添加的方块在1.12未添加，或者id没有改变，可以填空字符串。
-   \item 方块的基色
+   This property is added simply because a great number of block ids changed from 1.12 to 1.13. If your block doesn't exist in 1.12, or its id kept unchanged, you can fill in an empty string.
    
-   这可能是最容易出错的地方。对于原版方块，你可以查询\href{https://wiki.biligame.com/mc/%E5%9C%B0%E5%9B%BE%E7%89%A9%E5%93%81%E6%A0%BC%E5%BC%8F#idcounts.dat_.E6.A0.BC.E5.BC.8F}{Minecraft Wiki}。如果是mod自定义的方块，要么自己想办法测，要么去问mod开发者。
+   \item Base color of this block.
    
-   如果不懂什么是基色，去看\href{https://github.com/ToKiNoBug/SlopeCraftTutorial/blob/main/BasicPrinciple/Principle%20of%20map%20pixel%20arts.md}{地图画原理}。
-   \item 方块中文名称
-   \item 方块英文名称
-   \item 方块的下方需要依附其他方块
-   \item 方块是否发光
-   \item 方块是否可燃
-   \item 方块是否可被末影人偷走
-   \item 方块是否可用于墙面像素画（如水、铁质压力板等方块是不适合的）
-   \item 方块的材质图片（建议为一张16*16像素的png图片）   
+   Perhaps the most error prone property, but also the extremely and most important one. For vanilla blocks, view \href{https://minecraft.fandom.com/wiki/Map_item_format}{Minecraft Wiki}. For mod-blocks, measure the basecolor by yourself or ask the mod developer. Asking me will never take effort.
+   
+   If you don't understand what basecolor is, go to read \href{https://github.com/ToKiNoBug/SlopeCraftTutorial/blob/main/BasicPrinciple/Principle%20of%20map%20pixel%20arts.md}{Principle of map pixel arts}.
+
+   \item Chinese name of block (arbitrary value if you don't speak Chinese).
+   \item English name of block
+   \item Whether another block is required under this block
+   \item Whether the block glows
+   \item Whether the block is burnable
+   \item Whether the block can be stolen by enderman.
+   \item Whether the block is suitable for wall maps(for instance, water and iron pressure plate is not suitable)
+   \item Texture image of this block (16*16px png is suggested)  
    \end{enumerate}
 
    \subsubsection{方块与方块列表}
