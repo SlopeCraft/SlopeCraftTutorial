@@ -128,7 +128,7 @@
     
     Dithering uses Floyd-Steinberg algorithm, it tries to fit the orignal image better through mixing several similar colors.
     
-    Here we take picture drawn by \href{https://t.bilibili.com/544583492149793294}{Lancet\_Corgi} as an example(Thanks to Lancet\_Corgi, here's \href{https://space.bilibili.com/37171000}{his homepage on BiliBili})
+    Here we take picture drawn by \href{https://t.bilibili.com/544583492149793294}{Lancet\_Corgi} as an instance(Thanks to Lancet\_Corgi, here's \href{https://space.bilibili.com/37171000}{his homepage on BiliBili})
     
     \begin{figure}[htbp]
         %\addtocounter{figure}{-1}
@@ -196,44 +196,44 @@
     You can choose these options with flat map or wall map, but they \textbf{won't take any result}.
 
     \subsubsection{Construct the Glass Bridge}
-    立体地图画的每个水平截面上都有很多分散的方块，极不方便建造，倘若能用多条通路连接这些分散的方块，无疑能让建造更加容易。搭桥就是在一个水平面内用玻璃方块连接所有方块，形成通路从而辅助玩家建造的过程。
+    Each horizontal slice 3D map consists of seperated blocks, which is really hard to build. Connecting these blocks will obviously make a map easier to be built. Glassbridge is what we used to connect these blocks to form a pathway to assist players.
     
-    毫无疑问，搭桥会消耗额外的玻璃，因此不推荐在立体地图画的每一层都执行搭桥。默认每间隔4层搭一次桥，你也可以修改这个间隔。间隔过大，辅助搭桥的效果会减弱；间隔过小，浪费玻璃。
+    It's definatly that the glass bridge will lead to more glass consumption, so it's deprecated to construct it in each layer of 3D map. In default, SlopeCraft constructs once in each 5 layers, and that interval can be modified. A too large interval will decrease the effect while a too small interval is a waste of glass.
     
-    有关地图画压缩和搭桥的详细信息，可阅读\href{https://github.com/ToKiNoBug/SlopeCraftTutorial/blob/main/BasicPrinciple/Principle%20of%20map%20pixel%20arts.md}{地图画原理}。
+    For any details about compression and glass bridge, read \href{https://github.com/ToKiNoBug/SlopeCraftTutorial/blob/main/BasicPrinciple/Principle%20of%20map%20pixel%20arts.md}{Principle of Map Arts}.
 
-    \href{https://github.com/AbrasiveBoar902}{AbrasiveBoar902}为优化搭桥性能提供了极大帮助，感谢AbrasiveBoar902的帮助。
+    \href{https://github.com/AbrasiveBoar902}{AbrasiveBoar902} made great contributions to the performance of constructing glass bridge, sincere thanks to AbrasiveBoar902.
 
-    \subsubsection{防火/防末影人}
-    顾名思义，这是在保护可燃方块，并避免小黑偷东西。具体方法是用玻璃包裹这些方块的每一个暴露在外的表面，亲测有效。不过这也同时会耗费大量的玻璃，需要谨慎选择。
+    \subsubsection{Fire Proof / Enderman Proof}
+    We can learn by name that these functions is added to protect burnable blocks and prevent enderman from stealing blocks in map. The detailed method is to conver every exposed surfaces of these blocks with glass blocks, and it does work. On the other hand it consumes a large amount of glass blocks.
 
-    \subsubsection{导出}
-    目前支持的有\textbf{*.Litematic}（投影mod）和\textbf{*.nbt}（原版结构方块）两种格式。
+    \subsubsection{Export}
+    There are 2 formats supported currently, \textbf{*.Litematic} and \textbf{*.nbt}.
 
     \begin{figure}[htbp]
         \centering
         \includegraphics[width=15cm]{Img7_SelectFormat.png}
-        \caption{设置导出格式}
+        \caption{Set Export Format}
         \label{setExport3DFormat}
     \end{figure}
 
-    若要保存为结构方块格式，须在导出时选择相应的文件后缀名，如图\ref*{setExport3DFormat}所示。
+    If you hope to save as \textbf{*.nbt} format, it's required to select the correct suffix, like figure \ref*{setExport3DFormat}.
 
-    \subsection{导出纯文件地图画}
-    和以前的版本相比，导出为纯文件并没有什么变化。
+    \subsection{Export as File-Only Map}
+    File-only maps have few change compared to previous versions.
 
-    地图文件的文件名形如map\_i.dat，其中i是大于等于0的整数，如map\_3.dat。\textbf{i就是这个地图文件的序号。序号实际上是地图文件的唯一标识符}。正常情况下，我们生成的地图文件不应该覆盖掉无关的地图文件，所以设置初始序号需多加注意。
+    File name of a map data file is like map\_i.dat, where i is an integer no less than 0, like map\_3.dat. \textbf{i is the sequence number of this map data file. Sequence number is the unqiue label of a map data file in Minecraft.} In normal conditons, your exported map data files shouldn't cover any unrelated counterparts, so be careful when setting the beginning sequence number.
 
-   在游戏中按下F3+H可以查看物品的详细信息，\textbf{包括地图物品的Id，也就是对应的地图文件的序号}。图\ref*{mapItem}中显示的地图物品对应名为map\_6.dat的地图文件。
+    In Minecraft, pressing F3+h will enable you to learn details about an item, including map id, which is the sequence number of a map data file. Figure \ref*{mapItem} shows a map item of map\_6.dat.
    \begin{figure}[htbp]
        \centering
        \includegraphics[height=4cm]{Img8_MapItem.png}
-       \caption{地图物品与地图序号}
+       \caption{Map item and map sequence number}
        \label{mapItem}
    \end{figure}
 
    \begin{itemize}
-       \item 如果你想通过/give命令来获得地图：
+       \item Obtain map using /give command:
        
        起始序号可以随意设置，只要不覆盖掉无关的地图。
        \begin{enumerate}
