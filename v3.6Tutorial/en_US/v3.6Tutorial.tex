@@ -236,7 +236,6 @@
        \item Get map using /give command:
        
        The beginning sequence number can be set arbitarary as soon as no unreleated map will be covered.
-       起始序号可以随意设置，只要不覆盖掉无关的地图。
        \begin{enumerate}
            \item 1.12 command: /give @s filled\_map 1 i
            \item 1.13+ command: /give @s filled\_map\{map:i\}
@@ -314,38 +313,38 @@
    \item Texture image of this block (16*16px png is suggested)  
    \end{enumerate}
 
-   \subsubsection{方块与方块列表}
-   SlopeCraft中，方块列表以json格式存储，相关的图片放在FixedBlocks和CustomBlocks文件夹下。
+   \subsubsection{Blocks and Blocklists}
+   SlopeCraft stores blocklists in json format, while corresponding images are stored in FixedBlocks and CustomBlocks directories.
    
-   方块列表分为两类：固定方块列表与自定义方块列表。其中固定方块列表是我提供的最基础的一些方块，存储与\textbf{FixedBlocks.json}中（对应的图片在\textbf{FixedBlocks}文件夹下），确保每个基色都存在对应的方块。虽然方块列表中的方块事实上是在程序运行时才确定，但\textbf{你不应该修改它}。
+   There are two blocklists: fixed blocklist and cutsom blocklist. The former provides fundemental blocks which are stored in \textbf{FixedBlocks.json}(corresponding images in \textbf{FixedBlocks} directory), ensuring that each basecolor has at least one block. Although blocklists are determined at runtime, you \textbf{shouldn't modify the fixed blocklist}.
    
-   自定义方块列表存储在\textbf{CustomBlocks.json}中，相应的图片在\textbf{CustomBlocks}文件夹下，这是用户自定义的方块列表，允许用户灵活编辑。我在里面写了一些半砖方块，可以作为参考。
+   The other blocklist is stored in \textbf{CustomBlocks.json}(corresponding images in \textbf{CustomBlocks} directory), this is where you add your custom blocks. Some slabs have been already written for instances.
    
-   每个方块拥有以下属性：
+   Each block has the following properties:
    \begin{table}[h]
     \centering
-    \caption{方块的属性}
+    \caption{Block properties}
     \begin{tabular}{ccccc}
         \hline
-        属性名 & 类型 & 是否必填 & 默认值 & 说明  \\ \hline
-        baseColor & byte & 是 & & 方块的地图基色 \\
-        id & string & 是 & & 方块id，包括命名空间和详细方块状态\\
-        version & byte & 是 & & 方块最早出现的版本。 \\
-        nameZH & string & 是 & & 方块的中文名 \\
-        nameEN & string & 是 & & 方块的英文名 \\
-        icon & string & 是 & & 方块对应图片的文件名 \\
-        idOld & string & 否 & 空字符串 & 方块在1.12的id \\
-        needGlass & bool & 否 & false & 指示方块底部是否必须有其他方块 \\
-        isGlowing & bool & 否 & false & 指示方块是否发光 \\
-        endermanPickable & bool & 否 & false & 指示方块是否可以被末影人偷走 \\
-        burnable & bool & 否 & false & 指示方块是否可以被烧毁 \\
-        wallUseable & bool & 否 & true & 指示方块是否可以用于墙面像素画 \\
+        Property & Type & Is compulsory & Default value & Notes  \\ \hline
+        baseColor & byte & Yes & & Basecolor of the block \\
+        id & string & Yes & & Complete block id\\
+        version & byte & Yes & & Earliest version of the block \\
+        nameZH & string & Yes & & Chinese name of the block \\
+        nameEN & string & Yes & & English name of the block \\
+        icon & string & Yes & & Filename of related image file \\
+        idOld & string & No & Empty string & Block id in 1.12 \\
+        needGlass & bool & No & false & If the block needs a block below \\
+        isGlowing & bool & No & false & It the block emits light \\
+        endermanPickable & bool & No & false & If can be picked by enderman \\
+        burnable & bool & No & false & If the block is burnable \\
+        wallUseable & bool & No & true & If the block is suitable for wall map \\
         \hline 
     \end{tabular}       
    \end{table}
    
    \clearpage
-   用json格式表示如下：
+   Json code:
 \begin{lstlisting}[language = C++, numbers=left, 
     numberstyle=\tiny,keywordstyle=\color{blue!70},
     commentstyle=\color{red!50!green!50!blue!50},frame=shadowbox,
@@ -360,77 +359,77 @@
     "idOld":"minecraft:stone_slab[half=top,variant=cobblestone]"
 }
     \end{lstlisting}
-    上面这段json信息展示了一个圆石上半砖的方块信息，解析如下：
+    The json code above shows block properties of a upper cobbleston slab, here's the interpretation:
 
     \begin{enumerate}
-        \item 它的基色是11，这也是圆石、石砖、石头的基色。
+        \item It's basecolor is 11, same as stone block and cobblestone.
     
-        \item 它的方块id是“minecraft:cobblestone\_slab[type=top,waterlogged=false]”，中括号里的方块状态指出这是个上半砖，且不含水；
+        \item It's block id is “minecraft:cobblestone\_slab[type=top,waterlogged=false]”, block statues in the brackets indicate that it's a upper slab and is not waterlogged.
     
-        \item 它的中文名是“圆石上半砖”，英文名是“Cobblestone slab”；
+        \item It's Chinese name is damaged due to the fucking encoding, and its English name is "Cobblestone slab".
     
-        \item 它的图片是一个名为“cobblestone.png”的图片，这个图片放在CustomBlocks文件夹下；
+        \item It's releated image is a png file named “cobblestone.png”, which is stored in CustomBlocks directory.
     
-        \item 它最早出现的版本为0，代表它在1.12之前就已经加入；
+        \item It's earliest version is 0, which means that it's added before 1.12.
     
-        \item 由于它的方块id在1.13发生了变化，它在1.12的方块id为idOld的值。
+        \item It's block id has been changed in 1.13, so idOld shows it's old id in 1.12.
 
 \end{enumerate}
 
-    这段json中并没有显式列出方块的所有信息，其中needGlass、isGlowing、endermanPickable、burnable、wallUseable这些信息都使用了默认值，分别说明这个方块不需要依附其他方块、不发光、末影人偷不走、不可燃、可用于墙面像素画。
+    The json above doesn't show everything about this block, properties named needGlass, isGlowing, endermanPickable, burnable and wallUseable is set to default values. Thus, this block doesn't need to adhere to another block below, and it doesn't emit light, and enderman can't pick it, and it doesn't burn, and it is suitable for wall maps.
 
-    \subsubsection{自己动手，丰衣足食}
-    掌握以上信息后，就可以向自定义方块列表里写入任何你想要的方块了。步骤如下：
+    \subsubsection{Do It Yourself}
+    Having master informations as above, you are able to write in any block you want. Steps:
 
     \begin{enumerate}
-        \item 将方块的图片做成16*16像素的png图片，放入CustomBlocks文件夹内。
-        \item 将方块的json信息填入CustomBlocks.json中，注意json格式不要出错。
-        \item 重启SlopeCraft，如果一切正常，你的方块将会成功加入到方块列表里；否则注意察看报错信息。
-        \item 重复制作地图画的流程。
+        \item Make the your block's image into a 16 by 16 px png and move it into CustomBlocks directory.
+        \item Fill in your block's json information into CustomBlocks.json, don't make mistake in json format!
+        \item Restart SlopeCraft. If nothing goes wrong ,your block shall be added into blocklist successfully, otherwise remind the error message.
+        \item Have fun to make your map pixel arts with SlopeCraft.
     \end{enumerate}
 
-    \subsection{测试方块列表}
-    投影中方块缺失基本上都是\textbf{id拼写错误}造成的。如果你一次性导入很多方块，这个功能可以快速测试出方块列表中每个方块有没有id错误。
+    \subsection{Test Your Blocklist}
+    Most block-missing errors are caused by \textbf{WROUNG ID SPELLING}. If you imported lots of blocks, this function can help you to find and correct id mistakes.
 
-    测试方块列表会生成一个特殊的结构方块文件，包含每种基色拥有的每一种可用方块（因版本不符合的除外）。结构文件中每个方块均按方块列表中的顺序排列。
+    Testing blocklist will generate a special structure file, containing every blocks owned by every basecolors(unless the block is not useable for version reason). In the structure file, blocks are mapped in the same order as they are shown in the blocklist interface.
     
-    如果一切正常，不会有任何一个方块缺失；反之则说明对应的方块存在id错误。
+    If everything goes right, no block will be missing; otherwise it means an id mistake.
     
     \begin{figure}[htbp]
         \centering
         \includegraphics[width=15cm]{Img9_TestBlockList.png}
-        \caption{测试方块列表在高级菜单下}
+        \caption{Location of TestBlocklist}
         \label{locOfTestBlockList}
     \end{figure}
 
-    设置好游戏版本后，点击菜单栏\textbf{高级}下的\textbf{测试方块列表}，选择保存这个结构方块文件的位置，如图\ref*{locOfTestBlockList}。SlopeCraft就会生成一个这样的结构方块文件。导入到游戏中即可，效果如图\ref*{testBlockListNBT}。
+    After you have the game version selected, find and click \textbf{Test block list} under \textbf{Advanced}, then select the where to export the structure file, like figure \ref*{locOfTestBlockList}. SlopeCraft will then generate a structure like \ref*{testBlockListNBT}.
 
     \begin{figure}[htbp]
         \centering
-        \subfigure[左半段]{
+        \subfigure[Left part]{
             \begin{minipage}[t]{7cm}
                 \centering
                 \includegraphics[width=6.5cm]{Img10_TestBlockList_Left.png}
             \end{minipage}
         }
-        \subfigure[右半段]{
+        \subfigure[Right part]{
             \begin{minipage}[t]{7cm}
                 \centering
                 \includegraphics[width=6.5cm]{Img11_TestBlockList_Right.png}
             \end{minipage}
         }
-        \caption{测试方块列表}
+        \caption{Test bloclist}
         \label{testBlockListNBT}
     \end{figure}
 
 %\pagebreak
-\section{下个版本}
-    不出意外，下个版本v3.7将会加入以下功能：
+\section{Next update}
+    The next version(v3.7) will have following new functions:
     \begin{enumerate}
-        \item 跟进Minecraft1.18
-        \item 批量生成地图画
-        \item 手动精修
-        \item ……
+        \item Catch up with Minecraft 1.18
+        \item Batch operation to make pixel map arts
+        \item Refining converted map manually
+        \item ......
     \end{enumerate}
 
 \end{document}
