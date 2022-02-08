@@ -4,7 +4,7 @@
     "vuepress-plugin-mathjax": "^1.2.8"
   },
   "scripts": {
-    "docs:dev": "vuepress dev .",
-    "docs:build": "vuepress build ."
+    "dev": "vuepress dev .",
+    "build": "vuepress build ."
   }
 }
