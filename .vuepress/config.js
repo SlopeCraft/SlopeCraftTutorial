@@ -1,7 +1,7 @@
 module.exports = {
   title: 'SlopeCraft 教程',
   description: 'SlopeCraft 教程',
-  base: '/slopecrafttutorial/',
+  base: '/SlopeCraftTutorial/',
   locales: {
     '/': {
       lang: 'zh-CN',
