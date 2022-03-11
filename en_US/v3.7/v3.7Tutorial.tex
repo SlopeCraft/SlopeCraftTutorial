@@ -9,6 +9,7 @@
 \usepackage[colorlinks,linkcolor=blue]{hyperref}
 \usepackage{listings}
 \usepackage{fontspec}
+\usepackage{soul}
 \setmonofont{Consolas}
 \usepackage{color}
 \usepackage{xcolor}
@@ -45,26 +46,32 @@
     %%%%%%%%%%%%%%%%%%%%%%%
     % Page1
     %%%%%%%%%%%%%%%%%%%%%%%
-    This tutorial is not a fool-type one, only those must be introduced are introduced and those must be underlined are underlined. If any question, view a previous tutorial.
+    Welcome to use SlopeCraft v3.7! You will learn all functions of SlopeCraft in this document.
+
+    This tutorial is not a fool-type one, only those must be introduced are introduced and those must be underlined are underlined. If any question, read a previous one.
 
     %%%%%%%%%%%%%%%%%%%%%%%
     % Page2
     %%%%%%%%%%%%%%%%%%%%%%%
-    \pagebreak
+    %\pagebreak
     \section{Update Summary}
     \paragraph{New Contents}
 
-    \textbf{imageCutter}——A lite image preprocessor that can resize and cut images.
+    \textbf{imageCutter}——A lite image preprocessor that can scale and cut images.
 
     \paragraph{New Functions}
     \begin{enumerate}
         \item Update to MC1.18
         \item New image converting algorithm to reserve edge better : AiCvter (genetic algorithm actually)
     \end{enumerate}
-    %%\paragraph{Bug Fixed}
-    %%\begin{enumerate}
-        %%\item Fixed the bug that may colors can't be disabled.
-    %%\end{enumerate}
+
+    \begin{comment}  
+    \paragraph{Bug Fixed}
+    \begin{enumerate}
+        \item Fixed the bug that may colors can't be disabled.
+    \end{enumerate}
+    \end{comment}
+
     \paragraph{Optimization and Other Changes}
     \begin{enumerate}
         \item \textbf{SlopeCraftL3.dll}——The kernel dll has another C API version, which might be easier to be called by other languages.
@@ -75,6 +82,16 @@
     % Page3
     %%%%%%%%%%%%%%%%%%%%%%%
     \section{Junior Tutorial}
+
+    \subsection{Preprocess Image}
+    Minecraft maps has a resolution which is multiples of 128 pixels, so it's really recommended to resize your image sothat your image can fully fill a single map or more.
+
+    The image preprocessor, \textbf{imageCutter.exe} can resize your image in 3 modes and using 2 transformation methods. However image scaling is far more complex than it seems to be, there're varities of professional softwares which can scale much better than my naive imageCutter, like PhotoShop.
+
+    If you want to crop your image, \textbf{imageCutter.exe} isn't able to do that. You should do that with a more expert software.
+
+    Last but not least, the most improtant function of \textbf{imageCutter.exe} is to cut image into several 128 by 128 blocks. There have been some users hoping to cut their schematics into 128 by 128 parts, so the image cutting function together with batch operation will satisfy them ---- images are obviously more easier to be cut than schematics.
+
     \subsection{Import Image}
     From the previous tutorial to now, the greatest change is still a new button \textbf{Settings}, which is used to process transparent pixels better.
  
@@ -105,13 +122,14 @@
     If a block's version is later than the game version, is will also be disabled. Note that not all block can be used in wall maps, like iron pressure plate and glowing lichen. In such condition, it's not only properties of basecolors and maps themselves but also your selected blocks that restrict your available color count.
 
     \subsection{Color Convertion}
-    There's no modification on the page of convertion. Just operate like before.
     
-    First, select a converting algorithm, then set whether to enable dithering or not. Then click \textbf{Convert}, after the convertion is finished, export in the way you want.
+    First, select a converting algorithm, then set dithering or not. Then click \textbf{Convert}, after the convertion is finished, export in the way you want.
 
     The 6 converting algorithms respectively correspond to 6 different color difference formulations. They care only pixel colors but ignore their position, which made them traditional algorithms. The rest one, \textbf{AiCvter}, uses the above 6 results as seeds and find a better one whose edge map is closer than the orignal image. This new algorithm cares about pixel's space information, thus it's nontraditional.
     
-    Among all algorithms, RGB+ is best recommended, RGB and XYZ have best speed while Lab94 and Lab00 have releatively good effect but are slow in speed. The HSV algorithm hasn't been working well for a long time, so it's not recommended. \textbf{Besides, AiCvter is the slowest but it worth trying if all traditional algorithms fail to make you satisfied.}
+    Among all algorithms, RGB+ is best recommended, RGB and XYZ have best speed while Lab94 and Lab00 have releatively good effect but are slow in speed. The HSV algorithm hasn't been working well for a long time, so it's not recommended. \textbf{Besides, AiCvter is the slowest but it's worth trying if all traditional algorithms fail to make you satisfied.}
+
+    For customizing AiCvter, see \ref{CustomizeAiCvter}.
     
     Dithering uses Floyd-Steinberg algorithm, it tries to fit the orignal image better through mixing several similar colors.
     
@@ -250,7 +268,7 @@
 
    You can jump to most pages via the left sidebar. So set the type of your maps, the blocklist, the convertion algorithm, and all exporting parameters. 
    
-   Mention that you can't jump directly to the two exporting page before a image is converted, but there's a lane: click \textit{Advanced} and \textit{Batch operation} and then \textit{Set exporting parameters} and you will jump to the page of exporting schematics before convertion. There's no skipping access to the page of exporting map data files since they have fewer parameteres than schematics.
+   Mention that you can't jump directly to the two exporting page before a image is converted, but there's a lane: click \textit{Advanced} and \textit{Batch operation} and then \textit{Set exporting parameters} and you will jump to the page of exporting schematics before convertion. There's no skipping access to the page of exporting map data files since they have fewer parameters than schematics.
 
    After assigning all parameters, select multiple images and a window will pop out like figure \ref*{BatchUi}. You can select the exporting format (litematica schematics, vanilla structures and map data files). If map data files are to be generated, you must choose a folder to put then and set their beginning sequece numbers while schematics' filenames and directories aren't editable now.
 
@@ -258,7 +276,7 @@
 
    \begin{figure}[htbp]
        \centering
-       \includegraphics[width=15cm]{Img11_BatchOp.png}
+       \includegraphics[width=15cm]{Img12_BatchOp.png}
        \caption{Interface of batch operation}
        \label{BatchUi}
    \end{figure}
@@ -408,14 +426,7 @@
     
     If everything goes right, no block will be missing; otherwise it means an id mistake.
     
-    \begin{figure}[htbp]
-        \centering
-        \includegraphics[width=15cm]{Img9_TestBlockList.png}
-        \caption{Location of TestBlocklist}
-        \label{locOfTestBlockList}
-    \end{figure}
-
-    After you have the game version selected, find and click \textbf{Test block list} under \textbf{Advanced}, then choose a directory to put the structure file, like figure \ref*{locOfTestBlockList}. SlopeCraft will then generate a structure like figure \ref*{testBlockListNBT}.
+    After you have the game version selected, find and click \textbf{Test block list} under \textbf{Advanced}, then choose a directory to put the structure file. SlopeCraft will then generate a structure like figure \ref*{testBlockListNBT}.
 
     \begin{figure}[htbp]
         \centering
@@ -435,12 +446,28 @@
         \label{testBlockListNBT}
     \end{figure}
 
+    \subsection{Customize the AiCvter}
+    \label{CustomizeAiCvter}
+    The AiCvter uses genetic algorithm(GA), you can change its parameters in submenu \textit{Ai converter parameters} under menu \textit{Advanced}.
+
+    \begin{figure}[htbp]
+        \centering
+        \includegraphics[width=10cm]{Img13_AiCvterPara.png}
+        \label{GAOpt}
+        \caption{AiConverter parameters}
+    \end{figure}
+
+    For those who understand GA, there's no need to explain these parameters. \textbf{If you don't know about GA, google it, otherwise please don't change them.}
+
+    The only one I need to introduce is \textit{maxFailTimes}. It means the maximum allowed continuous generations that GA failed to find a better solution. For example, if it's set to 50 and a GA solver hasn't been finding a better solution for 50 generations, the algorithm will stop to save time. A greater \textit{maxFailTimes} will reduce the probability of being premature but will make it less faster.
+
     
-%\pagebreak
+\pagebreak
 \section{Next update}
-    The next version(v3.7) will have following new functions:
+    The next version(v3.8) will have following new functions \st{probabaly}:
     \begin{enumerate}
-        \item Refining converted map manually
+        \item Refining converted map manually (well, stood up in this update)
+        \item Material restriction when building 3D structure
         \item ......
     \end{enumerate}
 
