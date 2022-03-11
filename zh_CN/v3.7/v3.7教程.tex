@@ -18,7 +18,7 @@
 
 \setlength{\headheight}{13pt}
 
-\title{SlopeCraft v3.6教程}
+\title{SlopeCraft v3.7教程}
 \author{TokiNoBug}
 \date{\today}
 
@@ -44,45 +44,36 @@
     %%%%%%%%%%%%%%%%%%%%%%%
     % Page1
     %%%%%%%%%%%%%%%%%%%%%%%
-    SlopeCraft v3.6是一个重大更新，整个程序都被重构了一遍，增加了许多硬核的功能，解决了不少棘手的麻烦：v3.6实现了期盼已久的有损压缩功能，可以把地图画总高度压缩到几乎任何值，彻底解决了地图画超出限高的问题；v3.6加入了“搭桥”功能，可以辅助玩家建造……
     
-    除此以外，v3.6还修改了界面的操作逻辑。加之上一版教程还是v3.1，我认为有必要写个新的教程。
+    欢迎使用SlopeCraft v3.7！
 
-    这篇教程不是“傻瓜式”的，我只介绍必须介绍的，强调必须强调的。
+    这篇教程不是“傻瓜式”的，我只介绍必须介绍的，强调必须强调的。如果有任何问题，请阅读旧版本的教程。
 
     %%%%%%%%%%%%%%%%%%%%%%%
     % Page2
     %%%%%%%%%%%%%%%%%%%%%%%
-    \pagebreak
-    \section{v3.6更新内容简介}
+    %\pagebreak
+    \section{v3.7更新内容简介}
     \paragraph{新内容}
-    \textbf{SlopeCraftL3.dll}——SlopeCraft的内核开发成了通过接口类调用的\textbf{动态链接库}，包含了立体、平板、纯文件地图画和墙面像素画的核心功能，理论上应该能被C++、Java、Python等语言调用（C++亲测可用，其他语言顶多再套一层接口），以后的插件可以\textbf{少造轮子}了！
-
+    
+        \textbf{imageCutter.exe}——图片预处理工具，可以缩放，也可以按128像素将图片切割成块。
     \paragraph{新功能}
     \begin{enumerate}
-        \item 第61个基色：\textbf{发光地衣}——补上了v3.5.1的遗漏
-        \item 智能有损压缩——\textbf{彻底解决超限高问题}
-        \item 搭桥——\textbf{方便建造立体地图画}
-        \item 防火/防末影人——用玻璃块包围\textbf{易燃方块}和\textbf{可被小黑偷走}的方块
-        \item 导出为.NBT格式——\textbf{Litematica}和\textbf{原版结构方块}可以用，不知WorldEdit是否可用
-        \item 方块增加了各种\textbf{下半砖}
-        \item 自定义方块列表——更加自由，想要什么方块\textbf{自己加}
-        \item 构建三维结构时预览地图画——\textbf{有损压缩可能会微调画面内容}
-        \item 检查更新、反馈Bug——请认准\href{https://github.com/ToKiNoBug/SlopeCraft}{GitHub仓库}
-        \item 更加完善的报错系统——\textbf{报错信息不是天书！}
-        \item 启动时自动设置语言——默认简体中文，如果系统语言没有汉语，那就英文
-        \item settings.json——启动时的配置文件
-        \item 新的像素画类型：墙面像素画——其实有点不伦不类，偏偏很多人想要这个功能
+        \item 批量处理多个图片
+        \item 跟进Minecraft1.18
+        \item 新的边缘向智能图像转化算法：AiCvter（本质上其实是遗传算法）
     \end{enumerate}
+
+    \begin{comment}
     \paragraph{修复Bug}
     \begin{enumerate}
         \item 修复了无法禁用部分颜色的Bug——重写了方块列表的逻辑 
     \end{enumerate}
+    \end{comment}
+
     \paragraph{优化和其他更改}
-    \begin{enumerate}        
-        \item 优化了转化图片和搭桥的性能
-        \item 删除了可去掉的“确认”按钮，节省操作
-        \item 等待用户操作时进度条不再显示为繁忙状态，更符合操作习惯
+    \begin{enumerate}
+        \item \textbf{SLopeCraftL3.dll}——SlopeCraft内核dll现在有了一个新的C语言API，应该会更容易被其他语言调用。
     \end{enumerate}
 
     \pagebreak
@@ -90,8 +81,17 @@
     % Page3
     %%%%%%%%%%%%%%%%%%%%%%%
     \section{初级教程}
+    \subsection{预处理图像}
+    Minecraft地图的分辨率是128×128像素，因此我很推荐玩家将图片缩放为128像素的整数倍。
+
+    \textbf{imageCutter.exe}这个图片预处理器提供3种缩放模式和2种缩放方法（其实都是Qt内置的）。不过，图片缩放远比看上去的复杂，有很多专业的图像处理软件做的更好，比如PhotoShop。我推荐使用更好的软件。
+
+    如果你还需要剪裁图像，那\textbf{imageCutter.exe}满足不了你，找更专门的软件吧，哪怕画图都行。
+
+    另外，\textbf{imageCutter.exe}最重要的功能其实是图像分块。它可以把图像切分成数个128×128像素的小块。之所以推出这个功能，是因为不少用户希望把地图画分割成数个单独的地图，但切割图像远比切割原理图容易的多，切割图片结合批量处理，算是一个不错的方案。
+
     \subsection{导入图片}
-    从上一个教程（v3.1）到v3.6，最大的变化其实还是多了个“设置”按钮，用来更好的处理原图中\textbf{透明像素}。
+    从上一个教程（v3.1）到v3.7，最大的变化其实还是多了个“设置”按钮，用来更好的处理原图中\textbf{透明像素}。
  
     点击\textbf{设置}按钮，可以看到子窗口，如图\ref*{SetTPS}：
 
@@ -106,7 +106,9 @@
 
     透明像素处理策略有不同的方法处理纯透明像素（alpha=0）和半透明像素（alpha>0）。纯透明像素要么替换为背景色，要么设为空气；半透明像素既可以替换为背景色，也可以与背景色叠加融合，还可以忽略掉它的透明度属性，直接当做不透明像素。另外也可以设置背景色，默认背景色是雪块平铺时的浅灰色，也可以选择纯白色，或者任何自定义颜色。
 
-    强调一下，原图中\textbf{每个像素对应着地图画的一个方块}，导入图片之前需要自己裁剪、缩放图像，图片的长和宽最好是\textbf{128像素的整数倍}（不是强制要求）。这一步预处理应当由用户自己完成，我不在软件中实现这个功能，也不存在任何缩放图像的操作，SlopeCraft忠实的映射\textbf{每个像素}。
+    强调一下，原图中\textbf{每个像素对应着地图画的一个方块}，导入图片之前需要自己裁剪、缩放图像，图片的长和宽最好是\textbf{128像素的整数倍}（不是强制要求）。这一步预处理应当由用户自己完成，我不在软件中实现这个功能，也不存在任何缩放图像的操作，SlopeCraft.exe忠实的映射\textbf{每个像素}。
+
+    关于批量处理，阅读\ref{BatchOp}。
 
     \subsection{设置地图画类型}
     地图画类型中多了一项墙面像素画，除此以外没有改动。只需要按说明设置地图画类型及版本，然后直接跳转到下一页即可。
@@ -117,11 +119,14 @@
     如果一种方块版本过高，它同样会变为灰色，不可选择。有必要指出，有些方块是墙面像素画不能使用的，如铁质压力板、发光苔藓等。这时限制颜色数量的不仅有基色/地图色本身的性质，还有你所选的方块。
 
     \subsection{调整颜色}
-    调整颜色界面也没有值得一提的改变，和旧版本一样操作就好。
     
     首先选择好转化算法，然后选择是否启用抖动，点击\textbf{转化}，等待转化完成，就可以选择你想要的导出方式。
     
-    六个转化分别对应着六种不同的色差公式。算法中RGB+最为推荐，RGB和XYZ速度最快，Lab94和Lab00效果较好但性能较慢，HSV效果一直不太理想，不太推荐。
+    前六个转化算法分别对应着六种不同的色差公式。算法中RGB+最为推荐，RGB和XYZ速度最快，Lab94和Lab00效果较好但性能较慢，HSV效果一直不太理想，不太推荐。\textbf{AiCvter是最慢的，但如果前6种算法效果都不满意，不如试试它。}
+    
+    前6种算法只考虑像素的颜色，不考虑像素空间位置，它们称之为传统算法。而第7种算法\textbf{AiCvter}则以前6种算法生成的结果作为“种子”，在其基础之上寻找边缘轮廓更贴近原图的解。这个新算法同时考虑像素颜色和位置，是智能算法。
+
+    关于\textbf{AiCvter}的详细参数，参阅\ref{CustomizeAiCvter}。
     
     抖动则使用Floyd-Steinberg算法，尝试用几种相近的颜色掺混，试图更好的贴合原图。
     
@@ -253,6 +258,27 @@
    \pagebreak
    \section{高级功能}
    如果你只是简单的使用SlopeCraft，掌握初级功能足矣；但如果你需要自定义一些东西，那么你最好阅读下这一节。使用高级功能往往需要理解地图画的基本原理，我强烈建议你先看完\href{https://github.com/ToKiNoBug/SlopeCraftTutorial/blob/main/BasicPrinciple/Principle%20of%20map%20pixel%20arts.md}{地图画原理}。
+
+   \subsection{批量操作}
+   \label{BatchOp}
+   将多个图片自动转化为原理图或地图文件。
+
+   启动批量操作很简单，只需要在导入图片时选择多个图片即可。但在此之前，必须先完成所有设定。
+
+   通过左侧侧边栏可以访问大部分页面，可以设定相应的参数（地图画类型、方块列表、调色算法、导出参数）。
+
+   不过需要注意，由于界面的逻辑限制，在图像被转化成地图画之前，你不能直接访问两个导出页面。但这里有个特例：点击\textit{高级功能}菜单下的\textit{批量操作}，再点击\textit{设置导出参数}，可以无条件跳跃到导出为投影的页面。我没有提供跳跃到导出为地图文件的页面，因为它参数很少，并不需要。
+
+   所有参数设置完毕以后，选择多个图片，会出现一个弹窗，如图\ref*{BatchUi}。你可以选择导出格式。如果要输出为地图文件，那么你需要选择输出的文件夹，并设置第一个图像的初始地图序号。至于其他的原理图格式，输出的文件名是定死的，目前暂不支持修改。
+
+   点击\textit{开始执行}就可以启动批量处理。
+
+   \begin{figure}[htbp]
+       \centering
+       \includegraphics[width=15cm]{Img12_BatchOp.png}
+       \caption{批量操作界面}
+       \label{BatchUi}
+   \end{figure}
 
    \subsection{自定义方块列表}
    如果你不满足于我预设的那些方块，想要自己添加其他的原版方块甚至mod方块，这一章会告诉你怎么在SlopeCraft中添加并使用自定义的方块。
@@ -390,15 +416,8 @@
     测试方块列表会生成一个特殊的结构方块文件，包含每种基色拥有的每一种可用方块（因版本不符合的除外）。结构文件中每个方块均按方块列表中的顺序排列。
     
     如果一切正常，不会有任何一个方块缺失；反之则说明对应的方块存在id错误。
-    
-    \begin{figure}[htbp]
-        \centering
-        \includegraphics[width=15cm]{Img9_TestBlockList.png}
-        \caption{测试方块列表在高级菜单下}
-        \label{locOfTestBlockList}
-    \end{figure}
 
-    设置好游戏版本后，点击菜单栏\textbf{高级}下的\textbf{测试方块列表}，选择保存这个结构方块文件的位置，如图\ref*{locOfTestBlockList}。SlopeCraft就会生成一个这样的结构方块文件。导入到游戏中即可，效果如图\ref*{testBlockListNBT}。
+    设置好游戏版本后，点击菜单栏\textbf{高级}下的\textbf{测试方块列表}，选择保存这个结构方块文件的文件夹，SlopeCraft就会生成一个这样的结构方块文件。导入到游戏中即可，效果如图\ref*{testBlockListNBT}。
 
     \begin{figure}[htbp]
         \centering
@@ -418,13 +437,28 @@
         \label{testBlockListNBT}
     \end{figure}
 
+\subsection{自定义AiCvter}
+\label{CustomizeAiCvter}
+AiCvter使用遗传算法（GA），你可以设置它的参数，只需点击\textit{高级功能}菜单下的\textit{Ai转化器参数}。
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=10cm]{Img13_AiCvterParameters.png}
+    \label{GAOpt}
+    \caption{Ai转化器参数}
+\end{figure}
+
+如果你了解GA，那这些参数不需要解释。如果不了解，百度一下，或者干脆别动它。
+
+唯一需要解释的参数就是\textbf{最大提前收敛代数}。它指的是最大允许的连续寻优失败代数。举个例子，如果它的值是50代，那么当算法连续50代没有找到更优秀的解时，算法终止，节省时间。更大的\textbf{最大提前收敛代数}可以避免算法早熟，但会让它更慢。
+
 %\pagebreak
 \section{下个版本}
-    不出意外，下个版本v3.7将会加入以下功能：
+    下个版本v3.8将会加入以下功能\st{（大概）}：
     \begin{enumerate}
-        \item 跟进Minecraft1.18
-        \item 批量生成地图画
-        \item 手动精修
+        \item 手动精修（本次更新鸽了）
+        \item 构建三维结构时允许限制每种材料用量
+        \item 跟进Minecraft 1.19
         \item ……
     \end{enumerate}
 

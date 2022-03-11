@@ -61,6 +61,7 @@
 
     \paragraph{New Functions}
     \begin{enumerate}
+        \item Batch operation: process multiple images automatically
         \item Update to MC1.18
         \item New image converting algorithm to reserve edge better : AiCvter (genetic algorithm actually)
     \end{enumerate}
@@ -84,7 +85,7 @@
     \section{Junior Tutorial}
 
     \subsection{Preprocess Image}
-    Minecraft maps has a resolution which is multiples of 128 pixels, so it's really recommended to resize your image sothat your image can fully fill a single map or more.
+    Minecraft maps has a resolution of 128 pixels, so it's really recommended to resize your image sothat your image can fully fill a single map or more.
 
     The image preprocessor, \textbf{imageCutter.exe} can resize your image in 3 modes and using 2 transformation methods. However image scaling is far more complex than it seems to be, there're varities of professional softwares which can scale much better than my naive imageCutter, like PhotoShop.
 
@@ -108,7 +109,7 @@
 
     We have various method to deal with full-transparent pixels(alpha=0) and semitransparent pixels(alpha>0). The former are either replaced with background color or air block, while the latter have 3 choices: to be replaced with background color, to be composed with background color, or to be taken as non-transparent pixel by ignoring its alpha channel. Besides, the background color is also customizable. In default it's light gray.
 
-    Please note that each \textbf{pixel corresponds to a block in map}. Since the width and height are recommended to be any \textbf{multiple of 128 pixels}, you should better cut and scale you image before importing into SlopeCraft.(Recommended but not forced) This preprocessing should be done by user instead of software, so I don't and won't implement such function in SlopeCraft. As a result, there is not any resizing or scaling operation in SlopeCraft, \textbf{each pixel} shall be reflected faithfully.
+    Please note that each \textbf{pixel corresponds to a block in map}. Since the width and height are recommended to be any \textbf{multiple of 128 pixels}, you should better cut and scale you image before importing into SlopeCraft.(Recommended but not forced) This preprocessing should be done by user instead of software, so I don't and won't implement such function in SlopeCraft. As a result, there is not any resizing or scaling operation in SlopeCraft.exe, \textbf{each pixel} shall be reflected faithfully.
 
     For processing multiple images at one time, see \ref{BatchOp}.
 
@@ -158,7 +159,7 @@
     \end{figure}
     
     \subsection{Export 3D structure}
-    If you hope to save the map in \textbf{.Litematic}(for Litematica mod) or \textbf{.nbt}(for Minecraft strcuture block) format, you should click \textbf{Build 3D} and then \textbf{Export}. When finished building, SlopeCraft will send you a preview window where you can see the material list and map.
+    If you hope to save the map in \textbf{.litematic}(for Litematica mod) or \textbf{.nbt}(for Minecraft strcuture block) format, you should click \textbf{Build 3D} and then \textbf{Export}. When finished building, SlopeCraft will send you a preview window where you can see the material list and map.
 
     \begin{figure}[htbp]
         \centering
@@ -468,6 +469,7 @@
     \begin{enumerate}
         \item Refining converted map manually (well, stood up in this update)
         \item Material restriction when building 3D structure
+        \item Update to Minecraft 1.19
         \item ......
     \end{enumerate}
 
