@@ -19,7 +19,7 @@
 
 \setlength{\headheight}{13pt}
 
-\title{SlopeCraft v3.6 UserGuide}
+\title{SlopeCraft v3.7 UserGuide}
 \author{TokiNoBug}
 \date{\today}
 
@@ -45,11 +45,7 @@
     %%%%%%%%%%%%%%%%%%%%%%%
     % Page1
     %%%%%%%%%%%%%%%%%%%%%%%
-    SlopeCraft is such a great update that the whole software is rewritten again with Many hardcore functions implemented and lots of bugs fixed. In this version, lossy compression is added to compress total height of a 3D map to almost any arbitrary value, which entirely sloves the problem that 3D map often got higher than the world. Also, glassbridge is added in order to assitant player when building.
-    
-    Besides, ui is slightly changed. Since the last tutorial is for v3.1, it's necessary to write a new user guide.
-
-    By the way, this tutorial is not a fool-type one, only those must be introduced are introduced and those must be underlined are underlined. If any question, view a previous tutorial.
+    This tutorial is not a fool-type one, only those must be introduced are introduced and those must be underlined are underlined. If any question, view a previous tutorial.
 
     %%%%%%%%%%%%%%%%%%%%%%%
     % Page2
@@ -58,33 +54,20 @@
     \section{Update Summary}
     \paragraph{New Contents}
 
-    \textbf{SlopeCraftL3.dll}——The kernel of SlopeCraft is developed into a dynamic linked library through a interface class, including core functions of 3d, flat, file-only and wall maps. Theoretically, this lib can be called by not only C++ but also Java and Python and so on.(When it comes to other languages, one more layer of interface might be required). Future plugins will have one more choice.
+    \textbf{imageCutter}——A lite image preprocessor that can resize and cut images.
 
     \paragraph{New Functions}
     \begin{enumerate}
-        \item The 61th basecolor
-        \item Intelligent lossy compression
-        \item Glassbridge construction——\textbf{Easy to build 3d maps}
-        \item Fireproof and enderman-proof——cover vulnerable blocks with glass.
-        \item Export as .NBT format——Minecraft structure block format.
-        \item All kinds of \textbf{Upper slabs} to blocklist.
-        \item Customizable blocklist——add any block if you like.
-        \item Preview map when constructing 3d structure——\textbf{Lossy compression may edit it slightly}
-        \item Check for updates and report bugs——by subject to \href{https://github.com/ToKiNoBug/SlopeCraft}{repository on GitHub}.
-        \item More complete error-reporing function.
-        \item Reset language automatically when starting——if Chinese isn't found in system language, English instead.
-        \item settings.json——config files for starting.
-        \item New map type: wall maps——kind of weird but requested for many times.
+        \item Update to MC1.18
+        \item New image converting algorithm to reserve edge better : AiCvter (genetic algorithm actually)
     \end{enumerate}
-    \paragraph{Bug Fixed}
-    \begin{enumerate}
-        \item Fixed the bug that may colors can't be disabled.
-    \end{enumerate}
+    %%\paragraph{Bug Fixed}
+    %%\begin{enumerate}
+        %%\item Fixed the bug that may colors can't be disabled.
+    %%\end{enumerate}
     \paragraph{Optimization and Other Changes}
-    \begin{enumerate}        
-        \item Optimized the performance of converting and constructing glassbridge.
-        \item Deleted unnecessary \textbf{Confirm} buttons. Less opeartions required now.
-        \item Progessbars are no longer in busy state when waitting for user's operation. More suited for users now.
+    \begin{enumerate}
+        \item \textbf{SlopeCraftL3.dll}——The kernel dll has another C API version, which might be easier to be called by other languages.
     \end{enumerate}
 
     \pagebreak
@@ -104,11 +87,13 @@
         \label{SetTPS}
     \end{figure}
     
-    \textbf{Note: If you want to import a image with transparency under custom transparency processing strategy, you must set the strategy first and then import you image! Otherwise the image will only be preprocessed by the default strategy! If you set the strategy after having your image imported, import you image again.}
+    \textbf{Note: If you want to import a image with transparency under custom transparency processing strategy, you must set the strategy first! Otherwise the image will only be preprocessed by the default strategy! If you set the strategy after having your image imported, load you image again.}
 
     We have various method to deal with full-transparent pixels(alpha=0) and semitransparent pixels(alpha>0). The former are either replaced with background color or air block, while the latter have 3 choices: to be replaced with background color, to be composed with background color, or to be taken as non-transparent pixel by ignoring its alpha channel. Besides, the background color is also customizable. In default it's light gray.
 
     Please note that each \textbf{pixel corresponds to a block in map}. Since the width and height are recommended to be any \textbf{multiple of 128 pixels}, you should better cut and scale you image before importing into SlopeCraft.(Recommended but not forced) This preprocessing should be done by user instead of software, so I don't and won't implement such function in SlopeCraft. As a result, there is not any resizing or scaling operation in SlopeCraft, \textbf{each pixel} shall be reflected faithfully.
+
+    For processing multiple images at one time, see \ref{BatchOp}.
 
     \subsection{Set Map Type}
     The only modification is that a new kind of map (wall maps) is added. You just need to choose the right map type and game version following the description on ui, then turn to the next page.
@@ -124,7 +109,9 @@
     
     First, select a converting algorithm, then set whether to enable dithering or not. Then click \textbf{Convert}, after the convertion is finished, export in the way you want.
 
-    The 6 converting algorithms respectively correspond to 6 different color difference formulations. Among them, RGB+ is best recommended, RGB and XYZ have best speed while Lab94 and Lab00 have releatively good effect but are slow in speed. The HSV algorithm hasn't been working well for a long time, so it's not recommended.
+    The 6 converting algorithms respectively correspond to 6 different color difference formulations. They care only pixel colors but ignore their position, which made them traditional algorithms. The rest one, \textbf{AiCvter}, uses the above 6 results as seeds and find a better one whose edge map is closer than the orignal image. This new algorithm cares about pixel's space information, thus it's nontraditional.
+    
+    Among all algorithms, RGB+ is best recommended, RGB and XYZ have best speed while Lab94 and Lab00 have releatively good effect but are slow in speed. The HSV algorithm hasn't been working well for a long time, so it's not recommended. \textbf{Besides, AiCvter is the slowest but it worth trying if all traditional algorithms fail to make you satisfied.}
     
     Dithering uses Floyd-Steinberg algorithm, it tries to fit the orignal image better through mixing several similar colors.
     
@@ -255,6 +242,32 @@
    \section{Advanced Functions}
    Basical function is enough if you just want to use SlopeCraft simply. However, if you want to customize something, you'd better have a look at this section. Using advanced functions usually requires understanding of map arts' principles. It's strongly recommended to read \href{https://github.com/ToKiNoBug/SlopeCraftTutorial/blob/main/BasicPrinciple/Principle%20of%20map%20pixel%20arts.md}{Principle of map pixel arts}.
 
+   \subsection{Batch operation}
+   \label{BatchOp}
+   This function aims to make multiple images into map data files or schematics.
+
+   It's really easy to start, just select multiple image files when importing image. But before doing so, you must have all settings done.
+
+   You can jump to most pages via the left sidebar. So set the type of your maps, the blocklist, the convertion algorithm, and all exporting parameters. 
+   
+   Mention that you can't jump directly to the two exporting page before a image is converted, but there's a lane: click \textit{Advanced} and \textit{Batch operation} and then \textit{Set exporting parameters} and you will jump to the page of exporting schematics before convertion. There's no skipping access to the page of exporting map data files since they have fewer parameteres than schematics.
+
+   After assigning all parameters, select multiple images and a window will pop out like figure \ref*{BatchUi}. You can select the exporting format (litematica schematics, vanilla structures and map data files). If map data files are to be generated, you must choose a folder to put then and set their beginning sequece numbers while schematics' filenames and directories aren't editable now.
+
+   Click \textit{Start} and all images will be finished automatically.
+
+   \begin{figure}[htbp]
+       \centering
+       \includegraphics[width=15cm]{Img11_BatchOp.png}
+       \caption{Interface of batch operation}
+       \label{BatchUi}
+   \end{figure}
+   
+   \subsection{Blocklist presets}
+   A blocklist preset is a preset that assigned whether each basecolor is used and it's block id to be used. It is stored as json with \textit{*.scPreset.json} suffix.
+
+   Find \textit{Blocklist preset} submenu below \textit{Advanced} menu, where you can save current blocklist as preset files, or load from a preset file.
+
    \subsection{Customize blocklist}
    If you aren't satisfyed with default blocks, which means that you hope to add other vanilla blocks or mod-blocks, this section will tell you what to do.
    
@@ -376,7 +389,7 @@
 
 \end{enumerate}
 
-    The json above doesn't show everything about this block, properties named needGlass, isGlowing, endermanPickable, burnable and wallUseable is set to default values. Thus, this block doesn't need to adhere to another block below, and it doesn't emit light, and enderman can't pick it, and it doesn't burn, and it is suitable for wall maps.
+    The json above doesn't show everything about this block, properties named needGlass, isGlowing, endermanPickable, burnable and wallUseable are set to default values. Thus, this block doesn't need to adhere to another block below, and it doesn't emit light, and enderman can't pick it, and it doesn't burn, and it is suitable for wall maps.
 
     \subsubsection{Do It Yourself}
     Having master informations as above, you are able to write in any block you want. Steps:
@@ -402,7 +415,7 @@
         \label{locOfTestBlockList}
     \end{figure}
 
-    After you have the game version selected, find and click \textbf{Test block list} under \textbf{Advanced}, then select the where to export the structure file, like figure \ref*{locOfTestBlockList}. SlopeCraft will then generate a structure like \ref*{testBlockListNBT}.
+    After you have the game version selected, find and click \textbf{Test block list} under \textbf{Advanced}, then choose a directory to put the structure file, like figure \ref*{locOfTestBlockList}. SlopeCraft will then generate a structure like figure \ref*{testBlockListNBT}.
 
     \begin{figure}[htbp]
         \centering
@@ -422,12 +435,11 @@
         \label{testBlockListNBT}
     \end{figure}
 
+    
 %\pagebreak
 \section{Next update}
     The next version(v3.7) will have following new functions:
     \begin{enumerate}
-        \item Catch up with Minecraft 1.18
-        \item Batch operation to make pixel map arts
         \item Refining converted map manually
         \item ......
     \end{enumerate}
