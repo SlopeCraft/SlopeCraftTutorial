@@ -4,7 +4,8 @@
     "vuepress-plugin-mathjax": "^1.2.8"
   },
   "scripts": {
-    "dev": "vuepress dev .",
-    "build": "vuepress build ."
+    "dev": "export NODE_OPTIONS=--openssl-legacy-provider && vuepress dev .",
+    "dev-win": "set NODE_OPTIONS=--openssl-legacy-provider && vuepress dev .",
+    "build": "export NODE_OPTIONS=--openssl-legacy-provider && vuepress build ."
   }
 }

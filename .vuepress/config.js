@@ -3,10 +3,10 @@ module.exports = {
   description: 'SlopeCraft 教程',
   base: '/SlopeCraftTutorial/',
   locales: {
-    '/': {
+    '/zh_CN/': {
       lang: 'zh-CN',
     },
-    '/en/': {
+    '/en_US/': {
       lang: 'en-US',
       title: 'SlopeCraft Tutorial',
       description: 'SlopeCraft Tutorial',
@@ -18,7 +18,7 @@ module.exports = {
     repoLabel: 'Github',
     editLinks: true,
     locales: {
-      '/': {
+      '/zh_CN/': {
         selectText: '选择语言',
         label: '简体中文',
         editLinkText: '在 GitHub 上编辑此页',
@@ -31,7 +31,7 @@ module.exports = {
         lastUpdated: '最后更新时间',
         algolia: {},
         nav: [
-          { text: '首页', link: '/' },
+          { text: '首页', link: '/zh_CN/' },
         ],
         sidebar: [
           {
@@ -39,11 +39,11 @@ module.exports = {
             collapsable: false,
             children: [
               {
-                path: '/v3.0/',
+                path: '/zh_CN/v3.0/',
                 title: 'v3.0傻瓜式教程'
               },
               {
-                path: '/v3.1/',
+                path: '/zh_CN/v3.1/',
                 title: 'v3.1教程'
               }
             ]
@@ -60,7 +60,7 @@ module.exports = {
           },
         ]
       },
-      '/en/': {
+      '/en_US/': {
         selectText: 'Languages',
         label: 'English',
         ariaLabel: 'Languages',
@@ -74,7 +74,7 @@ module.exports = {
         lastUpdated: 'Last Updated',
         algolia: {},
         nav: [
-          { text: 'Home', link: '/en/' },
+          { text: 'Home', link: '/en_US/' },
         ],
         sidebar: [
           {
@@ -82,7 +82,7 @@ module.exports = {
             collapsable: false,
             children: [
               {
-                path: '/en/v3.1/',
+                path: '/en_US/v3.1/',
                 title: 'v3.1 Tutorials'
               }
             ]
@@ -92,7 +92,7 @@ module.exports = {
             collapsable: false,
             children: [
               {
-                path: '/en/BasicPrinciple/',
+                path: '/en_US/BasicPrinciple/',
                 title: 'Principle of Map Pixel Arts'
               },
             ]
