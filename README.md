@@ -19,4 +19,4 @@ footer: GUN Licensed | Copyright © 2021-present ToKiNoBug
 
 ## 地图画工作原理
 
-1. [地图画原理](./zh_CN/BasicPrinciple/)
+1. [地图画原理](./BasicPrinciple/)
