@@ -1,11 +1,5 @@
 # Principle of map pixel arts
 
-<br>
-
-[简体中文](./Principle%20of%20map%20pixel%20arts.md) | **English**
-
-<br>
-
 This article will introduce how minecraft map pixel arts works, including 3D, flat and file-only maps. SlopeCraft cracks on these machanisms. By learning and hacking on these machnisms, people make custom images shown of maps.
 
 ## Why Maps ?
