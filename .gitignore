@@ -21,3 +21,6 @@ node_modules/
 *.log
 *.out
 *.aux
+zh_CN/v3.9/v3.9教程.xdv
+*.gz
+*.xdv

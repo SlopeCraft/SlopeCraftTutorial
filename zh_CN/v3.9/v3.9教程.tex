@@ -54,7 +54,7 @@
 % Page2
 %%%%%%%%%%%%%%%%%%%%%%%
 %\pagebreak
-\section{v3.8 ~ v3.9更新内容简介}
+\section{v3.8\~v3.9更新内容简介}
 \begin{comment}
 \paragraph{新内容}
 
@@ -75,6 +75,7 @@
 \paragraph{优化和其他更改}
 \begin{enumerate}
     \item 更新了图标
+    \item 移除了墙面地图画（v3.8更新）
 \end{enumerate}
 
 \pagebreak
@@ -343,7 +344,6 @@ Minecraft地图的分辨率是128×128像素，因此我很推荐玩家将图片
     \item 方块是否发光
     \item 方块是否可燃
     \item 方块是否可被末影人偷走
-    \item 方块是否可用于墙面像素画（如水、铁质压力板等方块是不适合的）
     \item 方块的材质图片（建议为一张16*16像素的png图片）
 \end{enumerate}
 
@@ -375,6 +375,8 @@ SlopeCraft中，方块列表以json格式存储，相关的图片放在FixedBloc
         \hline
     \end{tabular}
 \end{table}
+
+\textbf{属性 wallUseable 已经被移除，因为墙面地图画已经被移除。}
 
 \clearpage
 用json格式表示如下：
@@ -465,7 +467,7 @@ AiCvter使用遗传算法（GA），你可以设置它的参数，只需点击\t
 
 %\pagebreak
 \section{下个版本}
-下个版本v3.8将会加入以下功能（大概）：
+下个版本v3.10将会加入以下功能（大概）：
 \begin{enumerate}
     \item 构建三维结构时允许限制每种材料用量（又鸽了）
     \item 手动精修（又双鸽了）
